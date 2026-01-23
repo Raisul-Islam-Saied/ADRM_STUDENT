@@ -1367,8 +1367,8 @@ ${data.DistrictEn}`.trim();
 
         <div className="text-left space-y-6">
            <InfoCard title="Parents Info" icon={Users} items={[
-             {l: 'পিতার নাম, v: `${data.FatherNameBn}`},
-             {l: 'Father Name, v: `${data.FatherNameEn} `},
+             {l: 'পিতার নাম', v: `${data.FatherNameBn}`},
+             {l: 'Father Name', v: `${data.FatherNameEn} `},
             {l: 'মাতার নাম', v: `${data.MotherNameBn}`},
        {l: 'Mother Name', v: `${data.MotherNameEn}`},
            ]}/>
