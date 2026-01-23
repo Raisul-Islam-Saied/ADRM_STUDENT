@@ -1327,12 +1327,10 @@ Emergency: ${data.EmergencyNo}
 ${data.HouseNameBn}, ${data.VillageBn}
 ${data.UnionBn}, ${data.UpazilaBn}
 ${data.DistrictBn}
-`.trim();
-    
 ${data.HouseNameEn}, ${data.VillageEn}
 ${data.UnionEn}, ${data.UpazilaEn}
-${data.DistrictEn}
-`.trim();
+${data.DistrictEn}`.trim();
+    
 
   window.open(`https://wa.me/+88${phone}?text=${encodeURIComponent(msg)}`);
 };
