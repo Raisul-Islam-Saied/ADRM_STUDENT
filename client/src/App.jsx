@@ -38,17 +38,20 @@ const CONFIG = {
 
 // ROLE MAPPING (Email to Role)
 const USER_ROLES = {
-  "admin@madrasah.com":   { role: "Admin" },
-  "class1@madrasah.com":  { role: "Class", classBn: "১ম" },
-  "class2@madrasah.com":  { role: "Class", classBn: "২য়" },
-  "class3@madrasah.com":  { role: "Class", classBn: "৩য়" },
-  "class4@madrasah.com":  { role: "Class", classBn: "৪র্থ" },
-  "class5@madrasah.com":  { role: "Class", classBn: "৫ম" },
-  "class6@madrasah.com":  { role: "Class", classBn: "৬ষ্ঠ" },
-  "class7@madrasah.com":  { role: "Class", classBn: "৭ম" },
-  "class8@madrasah.com":  { role: "Class", classBn: "৮ম" },
-  "class9@madrasah.com":  { role: "Class", classBn: "৯ম" },
-  "class10@madrasah.com": { role: "Class", classBn: "১০ম" },
+  "admin@adrm.com":   { role: "Admin" },
+  "play@adrm.com":  { role: "Class", classBn: "প্লে" },
+  "nursery@adrm.com":  { role: "Class", classBn: "নার্সারি" },
+  "kg@adrm.com":  { role: "Class", classBn: "কেজি" },
+  "class1@adrm.com":  { role: "Class", classBn: "১ম" },
+  "class2@adrm.com":  { role: "Class", classBn: "২য়" },
+  "class3@adrm.com":  { role: "Class", classBn: "৩য়" },
+  "class4@adrm.com":  { role: "Class", classBn: "৪র্থ" },
+  "class5@adrm.com":  { role: "Class", classBn: "৫ম" },
+  "class6@adrm.com":  { role: "Class", classBn: "৬ষ্ঠ" },
+  "class7@adrm.com":  { role: "Class", classBn: "৭ম" },
+  "class8@adrm.com":  { role: "Class", classBn: "৮ম" },
+  "class9@adrm.com":  { role: "Class", classBn: "৯ম" },
+  "class10@adrm.com": { role: "Class", classBn: "১০ম" },
 };
 
 const formatDate = (dateStr) => {
@@ -585,10 +588,14 @@ const handleExportPDF = () => {
                   {currentUser.role === 'Admin' ? 'Admin Dashboard' : `Class ${currentUser.classBn} Dashboard`}
                 </p>
                 <h2 className="text-4xl font-black">{roleFilteredStudents.length} <span className="text-lg font-medium text-slate-400">Students</span></h2>
-                <div className="mt-4 flex gap-3">
-                   <div className="bg-white/10 px-3 py-1 rounded-lg text-xs font-medium">Class 6: {roleFilteredStudents.filter(s=>s.ClassBn=='৬ষ্ঠ').length}</div>
-                   <div className="bg-white/10 px-3 py-1 rounded-lg text-xs font-medium">Class 10: {roleFilteredStudents.filter(s=>s.ClassBn=='১০ম').length}</div>
-                </div>
+                <div className="mt-2 flex gap-3 text-xs">
+  <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg font-bold">
+    Male: {roleFilteredStudents.filter(s => s.Gender === 'Male').length}
+  </div>
+  <div className="bg-pink-100 text-pink-800 px-3 py-1 rounded-lg font-bold">
+    Female: {roleFilteredStudents.filter(s => s.Gender === 'Female').length}
+  </div>
+</div>
               </div>
               <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-600 rounded-full blur-[50px] opacity-50"></div>
             </div>
@@ -719,7 +726,7 @@ const LoginPage = () => {
         <label className="text-xs font-bold text-gray-400 uppercase ml-1">Email</label>
         <input 
           type="email"
-          placeholder="admin@madrasah.com"
+          placeholder="Enter Your Email"
           className="w-full p-4 mb-4 bg-gray-50 border border-transparent focus:bg-white focus:border-slate-900 rounded-xl outline-none font-bold transition-all"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -817,7 +824,11 @@ const FullForm = ({ initialData, onSave, onCancel }) => {
       setImgPreview(null);
     }
   }, [initialData]);
-
+useEffect(() => {
+  if (!initialData && currentUser?.role === "Class") {
+    setForm(f => ({ ...f, classBn: currentUser.classBn }));
+  }
+}, [initialData, currentUser]);
   // SMART ID GENERATION
   useEffect(() => {
     if (!initialData && form.sessionYear && form.dob && form.classBn && form.roll) {
