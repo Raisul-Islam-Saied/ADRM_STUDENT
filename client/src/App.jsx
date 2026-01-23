@@ -335,7 +335,7 @@ const App = () => {
 
     const headers = [
       "ID", "Time", "Session", "Name (Bn)", "Name (En)", "Roll", "Class (Bn)", "Class (En)", 
-      "BRN", "DOB", "Blood", "Father (Bn)", "Father (En)", "Mother (Bn)", "Mother (En)", 
+      "BRN", "DOB", "Blood", "Gender","Father (Bn)", "Father (En)", "Mother (Bn)", "Mother (En)", 
       "Mobile", "Emergency", "House (Bn)", "House (En)", "Village (Bn)", "Village (En)", 
       "Union (Bn)", "Union (En)", "Ward", "Upazila (Bn)", "Upazila (En)", 
       "District (Bn)", "District (En)", "Image URL", "Status"
@@ -343,7 +343,7 @@ const App = () => {
 
     const rows = dataToExport.map(s => [
           s.ID, s.Time, s.Session, s.StudentNameBn, s.StudentNameEn, s.Roll, s.ClassBn, s.ClassEn,
-          `'${s.BRN}`, s.DOB, s.BloodGroup, s.FatherNameBn, s.FatherNameEn, s.MotherNameBn, s.MotherNameEn,
+          `'${s.BRN}`, s.DOB, s.BloodGroup, s.Gender,s.FatherNameBn, s.FatherNameEn, s.MotherNameBn, s.MotherNameEn,
           `'${s.WhatsApp}`, `'${s.EmergencyNo}`, s.HouseNameBn, s.HouseNameEn, s.VillageBn, s.VillageEn,
           s.UnionBn, s.UnionEn, s.WardNo, s.UpazilaBn, s.UpazilaEn, s.DistrictBn, s.DistrictEn,
           s.ImageURL, s.Status
@@ -761,7 +761,7 @@ const FullForm = ({ initialData, onSave, onCancel }) => {
   const defaultState = {
     sessionYear: new Date().getFullYear().toString(),
     studentId: '',
-    studentNameBn: '', studentNameEn: '', roll: '', classBn: '', brn: '', dob: '', bloodGroup: '',
+    studentNameBn: '', studentNameEn: '',  gender: '', roll: '', classBn: '', brn: '', dob: '', bloodGroup: '',
     fatherNameBn: '', motherNameBn: '', whatsappNumber: '', emergencyNumber: '',
     fatherNameEn: '', motherNameEn: '',
     houseNameBn: '', villageBn: '', unionBn: 'সরফভাটা', wardNo: '', upazilaBn: 'রাঙ্গুনিয়া', districtBn: 'চট্টগ্রাম',
@@ -786,6 +786,7 @@ const FullForm = ({ initialData, onSave, onCancel }) => {
         studentId: initialData.ID || '',
         studentNameBn: initialData.StudentNameBn || '',
         studentNameEn: initialData.StudentNameEn || '',
+        gender: initialData.Gender || '',
         roll: initialData.Roll || '',
         classBn: initialData.ClassBn || '',
         brn: initialData.BRN || '',
@@ -855,7 +856,7 @@ const FullForm = ({ initialData, onSave, onCancel }) => {
 
       if(!form.roll) newErrors.roll = 'রোল আবশ্যক';
       if(!form.classBn) newErrors.classBn = 'শ্রেণি আবশ্যক';
-      
+      if (!form.gender) newErrors.gender = 'জেন্ডার আবশ্যক';
       if(!form.brn) newErrors.brn = 'জন্মনিবন্ধন আবশ্যক';
       if(!form.dob) newErrors.dob = 'জন্ম তারিখ আবশ্যক';
     }
@@ -945,7 +946,21 @@ const FullForm = ({ initialData, onSave, onCancel }) => {
                   {['প্লে', 'নার্সারি', 'কেজি', '১ম', '২য়', '৩য়', '৪র্থ', '৫ম', '৬ষ্ঠ', '৭ম', '৮ম', '৯ম', '১০ম'].map(c=><option key={c} value={c}>{c}</option>)}
                </select>
              </div>
-             
+             <div className="relative pt-1 w-full">
+  <label className="text-[10px] font-bold text-gray-400 uppercase ml-1 block">
+    Gender
+  </label>
+  <select
+    className={`w-full p-4 bg-gray-50 rounded-xl font-bold outline-none border 
+      ${errors.gender ? 'border-red-500' : 'border-transparent'}`}
+    value={form.gender}
+    onChange={e => update('gender', e.target.value)}
+  >
+    <option value="">Select...</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+  </select>
+</div>
              <Input label="BIRTH REGISTRATION NUMBER" type="number" val={form.brn} set={v=>update('brn', v)} error={errors.brn} />
              <Input label="DATE OF BIRTH" type="date" val={form.dob} set={v=>update('dob', v)} error={errors.dob} />
              
