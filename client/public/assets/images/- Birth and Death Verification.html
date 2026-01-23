@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://everify.bdris.gov.bd/ -->
+<html
+  style=""
+  class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths"
+  data-arp-injected="true"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>- Birth and Death Verification</title>
+    <link href="./- Birth and Death Verification_files/css" rel="stylesheet" />
+
+    <script src="./- Birth and Death Verification_files/modernizr"></script>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="./- Birth and Death Verification_files/font-awesome.min.css"
+    />
+    <script>
+      window.addEventListener(
+        "contextmenu",
+        function (e) {
+          // do something here...
+          e.preventDefault();
+        },
+        false
+      );
+
+      document.onselectstart = function pauseEvent(e) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (e.preventDefault) e.preventDefault();
+        e.cancelBubble = true;
+        e.returnValue = false;
+        return false;
+      };
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-1">
+          <img
+            loading="lazy"
+            src="./- Birth and Death Verification_files/gov_logo.png"
+            height="80"
+            width="80"
+          />
+        </div>
+        <div class="col-sm-1">&nbsp;</div>
+        <div class="col-sm-11">
+          <span class="text-left text-uppercase"
+            ><strong
+              >Office of the Registrar General, Birth and Death
+              Registration</strong
+            ></span
+          >
+          <p class="text-left text-uppercase">Local Government Division</p>
+        </div>
+      </div>
+    </div>
+    <div class="container body-content">
+      <hr />
+
+      <form
+        action="https://everify.bdris.gov.bd/UBRNVerification/Search"
+        enctype="multipart/form-data"
+        id="ubrnsearchform"
+        method="post"
+        novalidate="novalidate"
+      >
+        <input
+          name="__RequestVerificationToken"
+          type="hidden"
+          value="gcAVmHAs1QpabMbDDybGOALxSDu-b7Vw7gcvpXriluTehI9B_PRqi9M3z4RIXYlExf4o2ZV9XtCLrueQ8gKpwiB7qAnUCRxm1flalqqWQ7c1"
+        />
+        <div style="float: right">
+          <h3>
+            <em>
+              <a href="https://everify.bdris.gov.bd/UDRNVerification"
+                >Click here to verify death record</a
+              ></em
+            >
+          </h3>
+        </div>
+        <div>
+          <p class="text-info">
+            <em
+              >Enter "17 digits Birth Registration Number" and "Date of Birth"
+              of a person to verify the Birth Record.</em
+            >
+            <br /><em
+              >জন্ম নিবন্ধন তথ্য যাচাই এর জন্য ১৭ অংকের জন্ম নিবন্ধন নম্বর ও
+              জন্ম তারিখ প্রবেশ করান</em
+            >
+          </p>
+          <div class="form-group">
+            <label for="ubrn">Birth Registration Number:</label>
+            <input
+              autocomplete="off"
+              class="form-control"
+              data-val="true"
+              data-val-regex="17 digits only"
+              data-val-regex-pattern="[0-9]{17}"
+              data-val-required="required"
+              id="ubrn"
+              name="UBRN"
+              oncopy="return false"
+              onpaste="return false"
+              type="number"
+              value=""
+            />
+            <span
+              class="field-validation-valid text-danger"
+              data-valmsg-for="UBRN"
+              data-valmsg-replace="true"
+            ></span>
+          </div>
+          <div class="form-group">
+            <label for="BirthDate">Date of Birth (YYYY-MM-dd):</label><br />
+            <input
+              class="datepicker text-box single-line hasDatepicker"
+              data-val="true"
+              data-val-date="The field BirthDate must be a date."
+              data-val-regex="Expected format: yyyy-MM-dd only"
+              data-val-regex-pattern="^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$"
+              data-val-required="required"
+              id="BirthDate"
+              name="BirthDate"
+              type="datetime"
+              value=""
+            />
+            <span
+              class="field-validation-valid text-danger"
+              data-valmsg-for="BirthDate"
+              data-valmsg-replace="true"
+            ></span>
+          </div>
+
+          <div class="form-group">
+            <script type="text/javascript">
+              $(function () {
+                $("#a0d23fd413fc401f91cb71ea3844a5f9").show();
+              });
+              function ______ed3d07bddbac4e649488ef19d8c2cb70________() {
+                $("#a0d23fd413fc401f91cb71ea3844a5f9").hide();
+                $.post(
+                  "/DefaultCaptcha/Refresh",
+                  { t: $("#CaptchaDeText").val(), __m__: "0" },
+                  function () {
+                    $("#a0d23fd413fc401f91cb71ea3844a5f9").show();
+                  }
+                );
+                return false;
+              }
+            </script>
+            <br />
+            <img
+              loading="lazy"
+              id="CaptchaImage"
+              src="./- Birth and Death Verification_files/Generate"
+            /><input
+              id="CaptchaDeText"
+              name="CaptchaDeText"
+              type="hidden"
+              value="f971a45cac1445f081bc11996507f0a7"
+            />
+            <br /><a
+              href="https://everify.bdris.gov.bd/#CaptchaImage"
+              id="a0d23fd413fc401f91cb71ea3844a5f9"
+              onclick="______ed3d07bddbac4e649488ef19d8c2cb70________()"
+              style="display: none"
+              >Refresh</a
+            ><br />The answer is<br /><input
+              autocomplete="off"
+              autocorrect="off"
+              id="CaptchaInputText"
+              name="CaptchaInputText"
+              type="text"
+              value=""
+            /><br />
+            <p class="text-danger"></p>
+          </div>
+          <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Search" />
+            <input class="btn btn-primary" type="reset" value="Clear" />
+          </div>
+        </div>
+      </form>
+      <link
+        href="./- Birth and Death Verification_files/jquery-ui.min.css"
+        rel="stylesheet"
+      />
+
+      <hr />
+      <footer class="">
+        <center>
+          <p>
+            © 2023 - Developed and maintained by Office of the Registrar
+            General, Birth and Death Registration
+          </p>
+        </center>
+      </footer>
+    </div>
+
+    <script src="./- Birth and Death Verification_files/jquery"></script>
+
+    <script src="./- Birth and Death Verification_files/bootstrap"></script>
+
+    <script src="./- Birth and Death Verification_files/jquery-ui-1.12.1.min.js.download"></script>
+
+    <script>
+      $(document).ready(function () {
+        $(".datepicker").datepicker({
+          dateFormat: "yy-mm-dd",
+          changemonth: true,
+          changeyear: true,
+        });
+      });
+    </script>
+
+    <script src="./- Birth and Death Verification_files/jqueryval"></script>
+
+    <script src="./- Birth and Death Verification_files/custom-validator"></script>
+
+    <div
+      id="ui-datepicker-div"
+      class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"
+    ></div>
+  </body>
+</html>
