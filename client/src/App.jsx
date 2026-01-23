@@ -662,10 +662,11 @@ const handleExportPDF = () => {
         <div className="pt-20 px-5 pb-10">
           <Header title={isEdit ? "Update Info" : "New Admission"} action={<div/>}/>
           <FullForm 
-            initialData={isEdit ? detailData : null} 
-            onSave={handleSave} 
-            onCancel={() => { setTab('home'); setIsEdit(false); setDetailData(null); }}
-          />
+  initialData={isEdit ? detailData : null} 
+  currentUser={currentUser}
+  onSave={handleSave} 
+  onCancel={() => { setTab('home'); setIsEdit(false); setDetailData(null); }}
+/>
         </div>
       )}
 
@@ -763,7 +764,7 @@ const LoginPage = () => {
 // 5. COMPLEX COMPONENTS (VALIDATED & STACKED)
 // ==============================================
 
-const FullForm = ({ initialData, onSave, onCancel }) => {
+const FullForm = ({ initialData, currentUser, onSave, onCancel }) => {
   const isUpdate = !!initialData;
   const defaultState = {
     sessionYear: new Date().getFullYear().toString(),
