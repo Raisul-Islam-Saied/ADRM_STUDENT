@@ -1354,7 +1354,7 @@ ${data.DistrictEn}`.trim();
           <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-100 text-blue-700"> Class {data.ClassEn || data.ClassBn}</span>
           <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-purple-100 text-purple-700">Roll {data.Roll}</span>
           {data.BloodGroup && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-100 text-red-700">{data.BloodGroup}</span>}
-       {data.Gender && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-yellow-100 text-yellow-700">{data.Gender}</span>}
+       
         </div>
 
         {/* --- ACTION BUTTONS --- */}
@@ -1367,15 +1367,18 @@ ${data.DistrictEn}`.trim();
 
         <div className="text-left space-y-6">
            <InfoCard title="Parents Info" icon={Users} items={[
-             {l: 'Father Name', v: `${data.FatherNameEn} (${data.FatherNameBn})`},
-             {l: 'Mother Name', v: `${data.MotherNameEn} (${data.MotherNameBn})`},
+             {l: 'পিতার নাম, v: `${data.FatherNameBn}`},
+             {l: 'Father Name, v: `${data.FatherNameEn} `},
+            {l: 'মাতার নাম', v: `${data.MotherNameBn}`},
+       {l: 'Mother Name', v: `${data.MotherNameEn}`},
            ]}/>
            <InfoCard title="Contact & Personal" icon={Shield} items={[
              {l: 'Mobile', v: data.WhatsApp},
              {l: 'Emergency', v: data.EmergencyNo},
              {l: 'Date of Birth', v: formatDate(data.DOB)},
              {l: 'BRN', v: data.BRN ? data.BRN.toString().replace(/['"]/g, '') : ''},
-           ]}/>
+      {l: 'Gender', v: data.Gender},
+    ]}/>
            <InfoCard title="Address Details" icon={MapPin} items={[
              {l: 'House', v: `${data.HouseNameEn} (${data.HouseNameBn})`},
              {l: 'Village', v: `${data.VillageEn} (${data.VillageBn})`},
