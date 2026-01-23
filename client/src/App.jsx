@@ -1310,7 +1310,7 @@ Class: ${data.ClassEn} | Roll: ${data.Roll}
 Session: ${data.Session}
 DOB: ${formatDate(data.DOB)}
 Blood: ${data.BloodGroup}
-Gender: ${data.gender}
+Gender: ${data.Gender}
 BRN: ${data.BRN}
 
 👪 *Guardian*
@@ -1351,10 +1351,10 @@ ${data.DistrictEn}`.trim();
         <p className="text-sm font-mono font-bold text-blue-600 mt-1 tracking-widest">ID: {data.ID}</p>
         
         <div className="flex justify-center gap-3 mt-4">
-          <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-100 text-blue-700">Class {data.ClassEn || data.ClassBn}</span>
+          <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-100 text-blue-700"> Class {data.ClassEn || data.ClassBn}</span>
           <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-purple-100 text-purple-700">Roll {data.Roll}</span>
           {data.BloodGroup && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-100 text-red-700">{data.BloodGroup}</span>}
-       {data.gender && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-yellow-100 text-yellow-700">{data.gender}</span>}
+       {data.Gender && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-yellow-100 text-yellow-700">{data.Gender}</span>}
         </div>
 
         {/* --- ACTION BUTTONS --- */}
