@@ -309,6 +309,7 @@ const App = () => {
               <div><span class="label">Class:</span> ${s.ClassEn || s.ClassBn || ''}</div>
               <div><span class="label">Roll:</span> ${s.Roll || ''}</div>
               <div><span class="label">Blood:</span> ${s.BloodGroup || ''}</div>
+              <div><span class="label">Gender:</span> ${s.gender || ''}</div>
             </td>
             <td class="col-family block">
               <div><span class="label">পিতা:</span> ${s.FatherNameBn || ''}</div>
@@ -1309,10 +1310,13 @@ Class: ${data.ClassEn} | Roll: ${data.Roll}
 Session: ${data.Session}
 DOB: ${formatDate(data.DOB)}
 Blood: ${data.BloodGroup}
+Gender: ${data.gender}
 BRN: ${data.BRN}
 
 👪 *Guardian*
+পিতা: ${data.FatherNameBn}
 Father: ${data.FatherNameEn}
+মাতা : ${data.MotherNameBn}
 Mother: ${data.MotherNameEn}
 
 📞 *Contact*
@@ -1320,6 +1324,11 @@ Mobile: ${data.WhatsApp}
 Emergency: ${data.EmergencyNo}
 
 🏠 *Address*
+${data.HouseNameBn}, ${data.VillageBn}
+${data.UnionBn}, ${data.UpazilaBn}
+${data.DistrictBn}
+`.trim();
+    
 ${data.HouseNameEn}, ${data.VillageEn}
 ${data.UnionEn}, ${data.UpazilaEn}
 ${data.DistrictEn}
@@ -1347,6 +1356,7 @@ ${data.DistrictEn}
           <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-blue-100 text-blue-700">Class {data.ClassEn || data.ClassBn}</span>
           <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-purple-100 text-purple-700">Roll {data.Roll}</span>
           {data.BloodGroup && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-100 text-red-700">{data.BloodGroup}</span>}
+       {data.gender && <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-yellow-100 text-yellow-700">{data.gender}</span>}
         </div>
 
         {/* --- ACTION BUTTONS --- */}
