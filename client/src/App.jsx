@@ -163,6 +163,31 @@ const App = () => {
     if (currentUser.role === "Class") return students.filter(s => s.ClassBn === currentUser.classBn);
     return [];
   }, [students, currentUser]);
+useEffect(() => {
+  const handleBack = (e) => {
+    e.preventDefault();
+
+    if (detailData) {
+      setDetailData(null);     // Detail থেকে Home
+    } else if (tab !== 'home') {
+      setTab('home');         // অন্য ট্যাব থেকে Home
+    } else {
+      // Home এ থাকলে সত্যিই বের হবে
+      if (window.confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) {
+        window.history.back();
+      } else {
+        window.history.pushState(null, "", window.location.href);
+      }
+    }
+  };
+
+  window.history.pushState(null, "", window.location.href);
+  window.addEventListener("popstate", handleBack);
+
+  return () => {
+    window.removeEventListener("popstate", handleBack);
+  };
+}, [tab, detailData]);
 
   const loadData = async () => {
     setLoading(true);
@@ -393,7 +418,7 @@ const handleExportPDF = () => {
       .student-card {
         border: 2px solid #000;
         padding: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 38px;
         height: 48%;
         box-sizing: border-box;
       }
@@ -406,12 +431,12 @@ const handleExportPDF = () => {
 
       .header h2 {
         margin: 0;
-        font-size: 14px;
+        font-size: 20px;
       }
 
       .header p {
         margin: 0;
-        font-size: 11px;
+        font-size: 15px;
       }
 
       .top-row {
@@ -431,6 +456,7 @@ const handleExportPDF = () => {
       }
 
       table {
+      font-size : 13px;
         width: 100%;
         border-collapse: collapse;
       }
@@ -447,7 +473,7 @@ const handleExportPDF = () => {
       }
 
       .footer {
-        margin-top: 8px;
+        margin-top: 28px;
         display: flex;
         justify-content: space-between;
       }
@@ -483,9 +509,11 @@ const handleExportPDF = () => {
           <table>
             <tr><td class="label">শিক্ষার্থীর নাম :</td><td>${s.StudentNameBn}</td></tr>
             <tr><td class="label">Student's Name :</td><td>${s.StudentNameEn}</td></tr>
+             <tr><td class="label">Student ID :</td><td>${s.ID}</td></tr>
             <tr><td class="label">জন্ম নিবন্ধন নং :</td><td>${s.BRN}</td></tr>
             <tr><td class="label">Date of Birth :</td><td>${formatDate(s.DOB)}</td></tr>
             <tr><td class="label">Blood Group :</td><td>${s.BloodGroup}</td></tr>
+              <tr><td class="label">Gender :</td><td>${s.Gender}</td></tr>
             <tr><td class="label">Session :</td><td>${s.Session}</td></tr>
 
             <tr><td class="label">পিতার নাম :</td><td>${s.FatherNameBn}</td></tr>
@@ -529,6 +557,175 @@ const handleExportPDF = () => {
   printWindow.document.close();
 };
 
+
+const handleExportAllIDCards = () => {
+  const list = getFilteredData();
+  if (list.length === 0) return alert("কোনো ডাটা নেই");
+
+  const w = window.open('', '_blank');
+
+  w.document.write(`
+  <html>
+  <head>
+    <title>All ID Cards</title>
+    <style>
+      @media print {
+        @page { size: A4; margin: 10mm; }
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial;
+      }
+
+      .page {
+        width: 210mm;
+        height: 297mm;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 8px;
+        justify-items: center;
+        align-items: center;
+        page-break-after: always;
+      }
+
+      .id-card {
+        width: 2.125in;
+        height: 3.37in;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid #1e3a8a;
+        text-align: center;
+        position: relative;
+      }
+
+      .header {
+        background: #1e3a8a;
+        color: white;
+        padding: 8px 0;
+      }
+
+      .header h2 { margin: 0; font-size: 12px; }
+      .header p { margin: 0; font-size: 9px; opacity: 0.8; }
+
+      .photo {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        border: 2px solid #1e3a8a;
+        object-fit: cover;
+        margin-top: 7px;
+      }
+
+      .name-section { margin-top: 5px; }
+      .name-en { font-size: 12px; font-weight: bold; }
+      .name-bn { font-size: 10px; color: #555; }
+      .student-id { 
+        display: inline-block; 
+        background: #1e3a8a; 
+        color: white; 
+        padding: 2px 8px; 
+        border-radius: 12px; 
+        font-size: 8px; 
+        margin-top: 4px;
+      }
+
+      .details-grid {
+        margin-top: 7px;
+        padding: 0 10px;
+        text-align: left;
+        font-size: 9px;
+      }
+
+      .address { font-size: 8px; }
+
+      .row { 
+        display: flex; 
+        justify-content: space-between; 
+        border-bottom: 1px solid #eee; 
+        padding: 2px 0; 
+      }
+
+      .label { font-weight: bold; color: #555; }
+      .value { font-weight: bold; color: #222; }
+
+      .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #1e3a8a;
+        height: 6px;
+      }
+
+      .principal {
+        position: absolute;
+        bottom: 7px;
+        right: 20px;
+        text-align: center;
+        width: 80px;
+        border-top: 1px solid #333;
+        font-size: 5px;
+      }
+    </style>
+  </head>
+  <body>
+  `);
+
+  list.forEach((data, i) => {
+
+    // প্রতি ৯টা পর নতুন পেজ
+    if (i % 9 === 0) {
+      if (i !== 0) w.document.write(`</div>`);
+      w.document.write(`<div class="page">`);
+    }
+
+    w.document.write(`
+      <div class="id-card">
+        <div class="header">
+          <h2>${CONFIG.APP_NAME}</h2>
+          <p>Rangunia, Chattogram</p>
+        </div>
+
+        <img src="${data.ImageURL}" class="photo" />
+
+        <div class="name-section">
+          <div class="name-en">${data.StudentNameEn}</div>
+          <div class="name-bn">${data.StudentNameBn}</div>
+          <div class="student-id">ID: ${data.ID}</div>
+        </div>
+
+        <div class="details-grid">
+          <div class="row"><span class="label">Class/Roll</span><span class="value">${data.ClassEn}/${data.Roll}</span></div>
+          <div class="row"><span class="label">Father</span><span class="value">${data.FatherNameBn}</span></div>
+          <div class="row"><span class="label">Mother</span><span class="value">${data.MotherNameBn}</span></div> 
+          <div class="row"><span class="label">DOB</span><span class="value">${formatDate(data.DOB)}</span></div>
+          <div class="row"><span class="label">Blood</span><span class="value">${data.BloodGroup}</span></div>
+          <div class="row"><span class="label">Mobile</span><span class="value">${data.WhatsApp}</span></div>
+<div class="row "><span class="label">Address</span><span class="value address">${data.HouseNameBn}
+</span></div>
+<div class="row"><span class="label"></span><span class="value address">${data.VillageBn},
+${data.UnionBn}, ${data.UpazilaBn},
+${data.DistrictBn}</span></div>
+          
+        </div>
+
+        <div class="principal">Principal</div>
+        <div class="footer"></div>
+      </div>
+    `);
+  });
+
+  w.document.write(`
+    </div>
+    <script>window.print()</script>
+  </body>
+  </html>
+  `);
+
+  w.document.close();
+};
 
 
   const filteredList = useMemo(() => {
@@ -618,6 +815,14 @@ const handleExportPDF = () => {
                 <button onClick={handleExportExcel} className="bg-green-100 p-2.5 rounded-lg text-green-700"><FileText size={20}/></button>
                 <button onClick={handleExportPDF} className="bg-red-100 p-2.5 rounded-lg text-red-700"><Printer size={20}/></button>
                 <button onClick={handleExportTablePDF} className="bg-blue-100 p-2.5 rounded-lg text-blue-700"><Layers size={20}/></button>
+      
+<button 
+  onClick={handleExportAllIDCards} 
+  className="bg-indigo-100 p-2.5 rounded-lg text-indigo-700"
+>
+  <IdCard size={20}/>
+</button>
+
               </div>
             </div>
 
@@ -1105,24 +1310,25 @@ const handlePrintIDCard = () => {
     <head>
       <title>ID Card: ${data.ID}</title>
       <style>
-        @media print {
-          @page { size: A4; margin: 0; }
-          body { background: white; }
-        }
+      @media print {
+  @page { size: A4; margin: 0; }
+  body { background: white; }
+}
 
-        body {
-          font-family: 'Segoe UI', Arial, sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          margin: 0;
-          background: #f3f4f6;
-        }
+body {
+  width: 210mm;
+  height: 297mm;
+  margin: 15;
+  display: flex;
+  justify-content: top;
+  align-items: top;
+}
+
+
 
         .id-card {
-          width: 324px;
-          height: 500px;
+           width: 2.125in;
+  height: 3.37in;
           background: #fff;
           border-radius: 10px;
           overflow: hidden;
@@ -1134,46 +1340,49 @@ const handlePrintIDCard = () => {
         .header {
           background: #1e3a8a;
           color: white;
-          padding: 12px 0;
+          padding: 8px 0;
         }
 
-        .header h2 { margin: 0; font-size: 16px; }
-        .header p { margin: 0; font-size: 10px; opacity: 0.8; }
+        .header h2 { margin: 0; font-size: 12px; }
+        .header p { margin: 0; font-size: 9px; opacity: 0.8; }
 
         .photo {
-          width: 100px;
-          height: 100px;
+          width: 65px;
+          height: 65px;
           border-radius: 50%;
-          border: 3px solid #1e3a8a;
+          border: 2px solid #1e3a8a;
           object-fit: cover;
-          margin-top: 15px;
+          margin-top: 7px;
         }
 
-        .name-section { margin-top: 8px; }
-        .name-en { font-size: 15px; font-weight: bold; }
-        .name-bn { font-size: 13px; color: #555; }
+        .name-section { margin-top: 5px; }
+        .name-en { font-size: 12px; font-weight: bold; }
+        .name-bn { font-size: 10px; color: #555; }
         .student-id { 
           display: inline-block; 
           background: #1e3a8a; 
           color: white; 
-          padding: 3px 10px; 
+          padding: 2px 8px; 
           border-radius: 12px; 
-          font-size: 12px; 
+          font-size: 8px; 
           margin-top: 4px;
         }
 
         .details-grid {
-          margin-top: 12px;
-          padding: 0 20px;
+          margin-top: 7px;
+          padding: 0 10px;
           text-align: left;
-          font-size: 11px;
+          font-size: 9px;
         }
-
+.address{
+         
+          font-size: 8px;
+        }
         .row { 
           display: flex; 
           justify-content: space-between; 
           border-bottom: 1px solid #eee; 
-          padding: 3px 0; 
+          padding: 2px 0; 
         }
 
         .label { font-weight: bold; color: #555; }
@@ -1184,17 +1393,17 @@ const handlePrintIDCard = () => {
           bottom: 0;
           width: 100%;
           background: #1e3a8a;
-          height: 12px;
+          height: 6px;
         }
 
         .principal {
           position: absolute;
-          bottom: 25px;
+          bottom: 7px;
           right: 20px;
           text-align: center;
           width: 80px;
           border-top: 1px solid #333;
-          font-size: 8px;
+          font-size: 5px;
         }
       </style>
     </head>
@@ -1215,18 +1424,18 @@ const handlePrintIDCard = () => {
         </div>
 
         <div class="details-grid">
-          <div class="row"><span class="label">Class</span><span class="value">${data.ClassEn}</span></div>
-          <div class="row"><span class="label">Roll</span><span class="value">${data.Roll}</span></div>
+          <div class="row"><span class="label">Class/Roll</span><span class="value">${data.ClassEn}/${data.Roll}</span></div>
+          
                    <div class="row"><span class="label">Father</span><span class="value">${data.FatherNameBn}</span></div>
           <div class="row"><span class="label">Mother</span><span class="value">${data.MotherNameBn}</span></div> 
           <div class="row"><span class="label">DOB</span><span class="value">${formatDate(data.DOB)}</span></div>
           <div class="row"><span class="label">Blood</span><span class="value">${data.BloodGroup}</span></div>
           <div class="row"><span class="label">Mobile</span><span class="value">${data.WhatsApp}</span></div>
 
-<div class="row"><span class="label">Address</span><span class="value">${data.HouseNameBn}, ${data.VillageBn}
+<div class="row "><span class="label">Address</span><span class="value address">${data.HouseNameBn}
 </span></div>
-<div class="row"><span class="label"></span><span class="value">
-${data.UnionBn}, ${data.UpazilaBn}
+<div class="row"><span class="label"></span><span class="value address">${data.VillageBn},
+${data.UnionBn}, ${data.UpazilaBn},
 ${data.DistrictBn}</span></div>
         </div>
 
@@ -1254,8 +1463,8 @@ ${data.DistrictBn}</span></div>
             .row { display: flex; margin-bottom: 3px; border-bottom: 1px dotted #ccc; padding-bottom: 1px; }
             .label { width: 130px; font-weight: bold; color: #555; }
             .value { flex: 1; font-weight: bold; color: #000; }
-            .photo { position: absolute; top: 25px; right: 25px; width: 80px; height: 80px; border: 1px solid #000; object-fit: cover; }
-            .section { margin-top: 10px; background: #eee; padding: 2px 5px; font-weight: bold; text-transform: uppercase; font-size: 10px; border-left: 3px solid #333; }
+            .photo { position: absolute; top: 80px; right: 10px; width: 80px; height: 80px; border: 1px solid #000; object-fit: cover; }
+            .section { margin-top: 15px; margin-bottom: 5px; background: #eee; padding: 2px 5px; font-weight: bold; text-transform: uppercase; font-size: 10px; border-left: 3px solid #333; }
           </style>
         </head>
         <body>
@@ -1271,9 +1480,13 @@ ${data.DistrictBn}</span></div>
             <div class="row"><span class="label">Name (Bn):</span><span class="value">${data.StudentNameBn}</span></div>
             <div class="row"><span class="label">Name (En):</span><span class="value">${data.StudentNameEn}</span></div>
             <div class="row"><span class="label">Class:</span><span class="value">${data.ClassEn} (${data.ClassBn})</span></div>
-            <div class="row"><span class="label">Roll / Session:</span><span class="value">${data.Roll} / ${data.Session}</span></div>
-            <div class="row"><span class="label">Blood / DOB:</span><span class="value">${data.BloodGroup} / ${formatDate(data.DOB)}</span></div>
-            <div class="row"><span class="label">BRN:</span><span class="value">${data.BRN}</span></div>
+            
+            <div class="row"><span class="label">Roll / Session:</span><span class="value">${data.Roll}</span></div>
+            <div class="row"><span class="label">Roll:</span><span class="value">$${data.Session}</span></div>
+            <div class="row"><span class="label">Date of birth:</span><span class="value">${formatDate(data.DOB)}</span></div>
+          <div  class="row"><span class="label">Blood : </span> <span class="value"> ${data.BloodGroup}</span></div>
+            <div  <div class="row"><span class="label">Birth Certificate:</span><span class="value">${data.BRN}</span></div>
+  <div class="row"><span class="label">Gender:</span><span class="value">${data.Gender}</span></div>
 
             <div class="section">Guardian Information</div>
             <div class="row"><span class="label">Father (Bn):</span><span class="value">${data.FatherNameBn}</span></div>
