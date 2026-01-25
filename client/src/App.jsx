@@ -1513,37 +1513,48 @@ ${data.DistrictBn}</span></div>
   const phone = data.WhatsApp?.replace(/['"\s-]/g,'');
   if(!phone) return alert("নম্বর নেই");
 
-  const msg = `
-📘 *${CONFIG.APP_NAME}*
-----------------------
-👤 *Student Info*
-Name: ${data.StudentNameEn} (${data.StudentNameBn})
-ID: ${data.ID}
-Class: ${data.ClassEn} | Roll: ${data.Roll}
-Session: ${data.Session}
-DOB: ${formatDate(data.DOB)}
-Blood: ${data.BloodGroup}
-Gender: ${data.Gender}
-BRN: ${data.BRN}
+  
+    const msg = `
+🏫 *${CONFIG.APP_NAME}*
+══════════════════════
 
-👪 *Guardian*
-পিতা: ${data.FatherNameBn}
-Father: ${data.FatherNameEn}
-মাতা : ${data.MotherNameBn}
-Mother: ${data.MotherNameEn}
+👤 *STUDENT PROFILE*
+────────────────────
+• Name        : ${data.StudentNameEn} (${data.StudentNameBn})
+• ID          : ${data.ID}
+• Class       : ${data.ClassEn}
+• Roll        : ${data.Roll}
+• Session     : ${data.Session}
+• Date of Birth : ${formatDate(data.DOB)}
+• Blood Group : ${data.BloodGroup}
+• Gender      : ${data.Gender}
+• BRN         : ${data.BRN}
 
-📞 *Contact*
-Mobile: ${data.WhatsApp}
-Emergency: ${data.EmergencyNo}
+👪 *GUARDIAN DETAILS*
+────────────────────
+• Father : ${data.FatherNameEn}
+  (${data.FatherNameBn})
+• Mother : ${data.MotherNameEn}
+  (${data.MotherNameBn})
 
-🏠 *Address*
-${data.HouseNameBn}, ${data.VillageBn}
-${data.UnionBn}, ${data.UpazilaBn}
-${data.DistrictBn}
-${data.HouseNameEn}, ${data.VillageEn}
-${data.UnionEn}, ${data.UpazilaEn}
-${data.DistrictEn}`.trim();
-    
+📞 *CONTACT INFO*
+────────────────────
+• Mobile    : ${data.WhatsApp}
+• Emergency : ${data.EmergencyNo}
+
+🏠 *ADDRESS*
+────────────────────
+• ${data.HouseNameEn}, ${data.VillageEn}
+• ${data.UnionEn}, ${data.UpazilaEn}
+• ${data.DistrictEn}
+• ${data.HouseNameBn}, ${data.VillageBn}
+• ${data.UnionBn}, ${data.UpazilaBn}
+• ${data.DistrictBn}
+
+══════════════════════
+✅ *REGISTRATION SUCCESSFUL*
+Your student profile has been created.
+`.trim();
 
   window.open(`https://wa.me/+88${phone}?text=${encodeURIComponent(msg)}`);
 };
