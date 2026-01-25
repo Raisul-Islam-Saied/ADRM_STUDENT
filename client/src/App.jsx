@@ -1070,7 +1070,7 @@ const FullForm = ({ initialData, currentUser, onSave, onCancel, showToast }) => 
     studentNameBn: '', studentNameEn: '',  gender: '', roll: '', classBn: '', brn: '', dob: '', bloodGroup: '',
     fatherNameBn: '', motherNameBn: '', whatsappNumber: '', emergencyNumber: '',
     fatherNameEn: '', motherNameEn: '',
-    houseNameBn: '', villageBn: '', unionBn: 'সরফভাটা', wardNo: '', upazilaBn: 'রাঙ্গুনিয়া', districtBn: 'চট্টগ্রাম',
+    houseNameBn: '', villageBn: 'মীরেরখীল', unionBn: 'সরফভাটা', wardNo: '', upazilaBn: 'রাঙ্গুনিয়া', districtBn: 'চট্টগ্রাম',
     imageUrl: ''
   };
 
@@ -1333,29 +1333,27 @@ useEffect(() => {
              <Input label="Ward No" type="number" val={form.wardNo} set={v=>update('wardNo', v)} error={errors.wardNo} />
              <Input label="উপজেলা (বাংলা)" val={form.upazilaBn} set={v=>update('upazilaBn', v)} />
              <Input label="জেলা (বাংলা)" val={form.districtBn} set={v=>update('districtBn', v)} />
-            {isUpdate && (
-  <>
-    <Input label="House Name (English)" 
-      val={form.houseNameEn} 
-      set={v=>update('houseNameEn', v)} />
+            <>
+  <Input label="House Name (English) - Optional" 
+    val={form.houseNameEn} 
+    set={v=>update('houseNameEn', v)} />
 
-    <Input label="Village (English)" 
-      val={form.villageEn} 
-      set={v=>update('villageEn', v)} />
+  <Input label="Village (English) - Optional" 
+    val={form.villageEn} 
+    set={v=>update('villageEn', v)} />
 
-    <Input label="Union (English)" 
-      val={form.unionEn} 
-      set={v=>update('unionEn', v)} />
+  <Input label="Union (English) - Optional" 
+    val={form.unionEn} 
+    set={v=>update('unionEn', v)} />
 
-    <Input label="Upazila (English)" 
-      val={form.upazilaEn} 
-      set={v=>update('upazilaEn', v)} />
+  <Input label="Upazila (English) - Optional" 
+    val={form.upazilaEn} 
+    set={v=>update('upazilaEn', v)} />
 
-    <Input label="District (English)" 
-      val={form.districtEn} 
-      set={v=>update('districtEn', v)} />
-  </>
-)}
+  <Input label="District (English) - Optional" 
+    val={form.districtEn} 
+    set={v=>update('districtEn', v)} />
+</>
           </div>
         )}
 
