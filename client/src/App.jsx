@@ -134,7 +134,15 @@ const App = () => {
   const [detailData, setDetailData] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [searchText, setSearchText] = useState('');
+// ... অন্যান্য useState এর নিচে ...
 
+const [toast, setToast] = useState({ show: false, msg: '', type: 'success' });
+
+const showToast = (msg, type = 'success') => {
+  setToast({ show: true, msg, type });
+  // ৩ সেকেন্ড পর অটোমেটিক বন্ধ হবে
+  setTimeout(() => setToast(prev => ({ ...prev, show: false })), 3000);
+};
   // 1. FIREBASE AUTH LISTENER
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -246,10 +254,16 @@ useEffect(() => {
       setTab('home');
       setDetailData(null);
       setIsEdit(false);
-      alert(isEdit ? "আপডেট সফল হয়েছে!" : "ভর্তি সফল হয়েছে!");
+      // আগের কোড: alert(isEdit ? "আপডেট সফল হয়েছে!" : "ভর্তি সফল হয়েছে!");
 
+// নতুন কোড:
+showToast(isEdit ? "আপডেট সফল হয়েছে!" : "ভর্তি সফল হয়েছে!", "success");
     } catch (error) {
-      alert("সমস্যা হয়েছে: " + error.message);
+      // আগের কোড: alert("সমস্যা হয়েছে: " + error.message);
+
+// নতুন কোড:
+showToast("সমস্যা হয়েছে: " + error.message, "error");
+
     }
     setProcessing(false);
   };
@@ -897,6 +911,29 @@ ${data.DistrictBn}</span></div>
            <NavTab icon={Search} label="Search" active={tab === 'search'} onClick={() => setTab('search')} />
         </div>
       )}
+      {/* --- TOAST NOTIFICATION --- */}
+{toast.show && (
+  <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[300] animate-in fade-in slide-in-from-top-5 duration-300 w-full max-w-xs px-4">
+    <div className={`flex items-center gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-md ${
+      toast.type === 'success' 
+        ? 'bg-white/95 border-emerald-100 text-emerald-800' 
+        : 'bg-white/95 border-red-100 text-red-800'
+    }`}>
+      <div className={`p-2 rounded-full shrink-0 ${
+        toast.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'
+      }`}>
+        {toast.type === 'success' ? <Check size={20} strokeWidth={3}/> : <AlertCircle size={20} strokeWidth={3}/>}
+      </div>
+      <div>
+        <h4 className="font-black text-sm uppercase tracking-wide">
+          {toast.type === 'success' ? 'Success' : 'Error'}
+        </h4>
+        <p className="text-xs font-bold opacity-80 mt-0.5">{toast.msg}</p>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
