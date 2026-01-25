@@ -992,9 +992,23 @@ const FullForm = ({ initialData, currentUser, onSave, onCancel }) => {
       
       const parseDate = (dStr) => {
   if (!dStr) return '';
-  const [y, m, d] = dStr.split('-');
-  return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
-};
+
+  // যদি already YYYY-MM-DD হয়
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) {
+    return dStr;
+  }
+
+  // অন্য সব কিছুর জন্য safe parse
+  const d = new Date(dStr);
+  if (isNaN(d.getTime())) return '';
+
+  // লোকাল ডেট বানিয়ে string
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+
+  return `${y}-${m}-${day}`;
+};;
       setForm({
         sessionYear: initialData.Session || '',
         studentId: initialData.ID || '',
