@@ -1514,7 +1514,8 @@ ${data.DistrictBn}</span></div>
   if(!phone) return alert("নম্বর নেই");
 
 const msg = `
-🏫 *${CONFIG.APP_NAME}.*
+══════════════════════
+  *${CONFIG.APP_NAME}.*
 ══════════════════════
 
 👤 *STUDENT PROFILE*
