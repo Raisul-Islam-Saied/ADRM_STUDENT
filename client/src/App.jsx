@@ -1071,7 +1071,11 @@ const FullForm = ({ initialData, currentUser, onSave, onCancel, showToast }) => 
     fatherNameBn: '', motherNameBn: '', whatsappNumber: '', emergencyNumber: '',
     fatherNameEn: '', motherNameEn: '',
     houseNameBn: '', villageBn: 'মীরেরখীল', unionBn: 'সরফভাটা', wardNo: '', upazilaBn: 'রাঙ্গুনিয়া', districtBn: 'চট্টগ্রাম',
-    imageUrl: ''
+    imageUrl: '',
+     villageEn: 'Mirerkhil',
+    unionEn: 'Sarfbhata',
+  upazilaEn: 'Rangunia',
+  districtEn: 'Chattogram',
   };
 
   const [form, setForm] = useState(defaultState);
