@@ -1519,7 +1519,7 @@ const msg = `
 
 👤 *STUDENT PROFILE*
 • Name  : ${data.StudentNameEn} 
-• নাম  : (${data.StudentNameBn})
+• নাম  : ${data.StudentNameBn}
 • ID          : ${data.ID}
 • Class       : ${data.ClassEn}
 • Roll        : ${data.Roll}
