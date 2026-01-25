@@ -989,12 +989,12 @@ const FullForm = ({ initialData, currentUser, onSave, onCancel }) => {
 
   useEffect(() => {
     if (initialData) {
-      const parseDate = (dStr) => {
-        if (!dStr) return '';
-        const d = new Date(dStr);
-        return isNaN(d.getTime()) ? '' : d.toISOString().split('T')[0];
-      };
       
+      const parseDate = (dStr) => {
+  if (!dStr) return '';
+  const [y, m, d] = dStr.split('-');
+  return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+};
       setForm({
         sessionYear: initialData.Session || '',
         studentId: initialData.ID || '',
