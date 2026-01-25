@@ -911,28 +911,78 @@ ${data.DistrictBn}</span></div>
            <NavTab icon={Search} label="Search" active={tab === 'search'} onClick={() => setTab('search')} />
         </div>
       )}
-      {/* --- TOAST NOTIFICATION --- */}
-{toast.show && (
-  <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[300] animate-in fade-in slide-in-from-top-5 duration-300 w-full max-w-xs px-4">
-    <div className={`flex items-center gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-md ${
-      toast.type === 'success' 
-        ? 'bg-white/95 border-emerald-100 text-emerald-800' 
-        : 'bg-white/95 border-red-100 text-red-800'
-    }`}>
-      <div className={`p-2 rounded-full shrink-0 ${
-        toast.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'
-      }`}>
-        {toast.type === 'success' ? <Check size={20} strokeWidth={3}/> : <AlertCircle size={20} strokeWidth={3}/>}
-      </div>
-      <div>
-        <h4 className="font-black text-sm uppercase tracking-wide">
-          {toast.type === 'success' ? 'Success' : 'Error'}
-        </h4>
-        <p className="text-xs font-bold opacity-80 mt-0.5">{toast.msg}</p>
-      </div>
-    </div>
-  </div>
-)}
+      {/* ============ PROFESSIONAL TOAST NOTIFICATION ============ */}
+      {toast.show && (
+        <>
+          {/* Custom CSS for Animation - এটি এনিমেশন নিশ্চিত করবে */}
+          <style>{`
+            @keyframes slideDown {
+              0% { transform: translateY(-100%) scale(0.8); opacity: 0; }
+              60% { transform: translateY(10px) scale(1.02); opacity: 1; }
+              100% { transform: translateY(0) scale(1); opacity: 1; }
+            }
+            @keyframes shrinkWidth {
+              from { width: 100%; }
+              to { width: 0%; }
+            }
+            .animate-toast-entry {
+              animation: slideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            }
+            .animate-progress {
+              animation: shrinkWidth 3s linear forwards;
+            }
+          `}</style>
+
+          <div className="fixed top-0 left-0 right-0 z-[1000] flex justify-center pt-6 pointer-events-none">
+            <div className="animate-toast-entry pointer-events-auto relative overflow-hidden bg-white/95 backdrop-blur-xl border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl w-[90%] max-w-sm">
+              
+              {/* Main Content */}
+              <div className="flex items-center gap-4 p-4">
+                {/* Icon Box */}
+                <div className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${
+                  toast.type === 'success' 
+                    ? 'bg-gradient-to-br from-emerald-400 to-green-600 text-white shadow-green-200' 
+                    : 'bg-gradient-to-br from-red-400 to-pink-600 text-white shadow-red-200'
+                }`}>
+                  {toast.type === 'success' ? <Check size={24} strokeWidth={3} /> : <AlertCircle size={24} strokeWidth={3} />}
+                </div>
+
+                {/* Text Content */}
+                <div className="flex-1 min-w-0">
+                  <h4 className={`text-sm font-black uppercase tracking-wider mb-0.5 ${
+                    toast.type === 'success' ? 'text-emerald-600' : 'text-red-600'
+                  }`}>
+                    {toast.type === 'success' ? 'Success' : 'Attention'}
+                  </h4>
+                  <p className="text-slate-600 text-xs font-bold leading-relaxed">
+                    {toast.msg}
+                  </p>
+                </div>
+
+                {/* Close Button */}
+                <button 
+                  onClick={() => setToast(prev => ({ ...prev, show: false }))}
+                  className="p-1 rounded-full hover:bg-gray-100 text-gray-400 transition"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Progress Bar Line */}
+              <div className={`h-1 w-full ${
+                toast.type === 'success' ? 'bg-emerald-100' : 'bg-red-100'
+              }`}>
+                <div className={`h-full animate-progress ${
+                  toast.type === 'success' ? 'bg-emerald-500' : 'bg-red-500'
+                }`}></div>
+              </div>
+
+            </div>
+          </div>
+        </>
+      )}
+      {/* ============ END PROFESSIONAL TOAST ============ */}
+
 
     </div>
   );
