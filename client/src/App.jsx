@@ -1531,10 +1531,10 @@ const msg = `
 • BRN         : ${data.BRN}
 
 👪 *GUARDIAN DETAILS*
-• Father :{data.FatherNameEn}
-• পিতা : ${data.FatherNameBn}
+• Father : ${data.FatherNameEn}
+• পিতা :  ${data.FatherNameBn}
 • Mother : ${data.MotherNameEn}
-• Father :${data.MotherNameBn}
+• Father : ${data.MotherNameBn}
 
 📞 *CONTACT INFO*
 • Mobile    : ${data.WhatsApp}
