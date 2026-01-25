@@ -54,15 +54,6 @@ const USER_ROLES = {
   "class10@adrm.com": { role: "Class", classBn: "১০ম" },
 };
 
-const formatDate = (dateStr) => {
-  if(!dateStr) return 'N/A';
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('bn-BD', {
-      day: '2-digit', month: '2-digit', year: 'numeric'
-    });
-  } catch (e) { return dateStr; }
-};
 
 const REGEX = {
   BANGLA: /^[\u0980-\u09FF\s.]+$/,
@@ -76,7 +67,18 @@ const REGEX = {
 // ==============================================
 
 const Header = ({ title, action }) => (
-  <div className="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-b border-gray-100 z-50 flex items-center justify-between px-5 shadow-sm">
+  <const formatDate = (dateStr) => {
+  if (!dateStr) return 'N/A';
+
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+
+  return d.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+}; className="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-b border-gray-100 z-50 flex items-center justify-between px-5 shadow-sm">
     <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">{title}</h1>
     {action}
   </div>
