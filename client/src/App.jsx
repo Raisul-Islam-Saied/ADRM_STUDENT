@@ -1514,9 +1514,9 @@ ${data.DistrictBn}</span></div>
   if(!phone) return alert("নম্বর নেই");
 
 const msg = `
-══════════════════════
-  *${CONFIG.APP_NAME}.*
-══════════════════════
+
+  *ABDUR RAZZAK DAKHIL MADRASAH*
+——————————————————————————————————
 
 👤 *STUDENT PROFILE*
 • Name  : ${data.StudentNameEn} 
