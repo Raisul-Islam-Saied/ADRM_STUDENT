@@ -302,7 +302,7 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
   const handleExportTablePDF = () => {
     const data = getFilteredData();
     if (!data || data.length === 0) {
-      alert("ডাটা নেই");
+      showToast("লিস্ট প্রিন্ট করার জন্য কোনো ডাটা নেই", "error");
       return;
     }
 
@@ -377,7 +377,7 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
 
   const handleExportExcel = () => {
     const dataToExport = getFilteredData();
-    if (dataToExport.length === 0) return alert("কোনো ডাটা পাওয়া যায়নি!");
+    if (dataToExport.length === 0)  return showToast("এক্সেল ডাউনলোড করার জন্য কোনো ডাটা নেই!", "error");
 
     const headers = [
       "ID", "Time", "Session", "Name (Bn)", "Name (En)", "Roll", "Class (Bn)", "Class (En)", 
@@ -406,7 +406,7 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
 
 const handleExportPDF = () => {
   const dataToExport = getFilteredData();
-  if (dataToExport.length === 0) return alert("কোনো ডাটা পাওয়া যায়নি!");
+  if (dataToExport.length === 0) return showToast("ইনফো শিটের জন্য কোনো ডাটা পাওয়া যায়নি!", "error");
 
   const printWindow = window.open('', '_blank', 'height=900,width=1100');
   if (!printWindow) {
@@ -577,7 +577,7 @@ const handleExportPDF = () => {
 
 const handleExportAllIDCards = () => {
   const list = getFilteredData();
-  if (list.length === 0) return alert("কোনো ডাটা নেই");
+  if (list.length === 0) return showToast("আইডি কার্ডের জন্য কোনো ডাটা নেই", "error");
 
   const w = window.open('', '_blank');
 
