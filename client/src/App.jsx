@@ -888,8 +888,10 @@ ${data.DistrictBn}</span></div>
   initialData={isEdit ? detailData : null} 
   currentUser={currentUser}
   onSave={handleSave} 
+            
   onCancel={() => { setTab('home'); setIsEdit(false); setDetailData(null); }}
-/>
+showToast={showToast}
+            />
         </div>
       )}
 
@@ -1060,7 +1062,7 @@ const LoginPage = () => {
 // 5. COMPLEX COMPONENTS (VALIDATED & STACKED)
 // ==============================================
 
-const FullForm = ({ initialData, currentUser, onSave, onCancel }) => {
+const FullForm = ({ initialData, currentUser, onSave, onCancel, showToast }) => {
   const isUpdate = !!initialData;
   const defaultState = {
     sessionYear: new Date().getFullYear().toString(),
@@ -1207,7 +1209,7 @@ useEffect(() => {
     if (step === 4) {
       if(!form.imageUrl) {
         newErrors.imageUrl = 'ছবি আবশ্যক';
-        alert("দয়া করে ছবি আপলোড করুন");
+        showToast("দয়া করে ছবি আপলোড করুন", "error"); 
       }
     }
 
@@ -1227,7 +1229,7 @@ useEffect(() => {
           img.src = ev.target.result;
           img.onload = () => {
              if (Math.abs(img.width - img.height) > 20) { 
-                alert("দুঃখিত! ছবিটি অবশ্যই স্কয়ার (বর্গাকার) হতে হবে।");
+                showToast("দুঃখিত! ছবিটি অবশ্যই স্কয়ার হতে হবে", "error");
                 e.target.value = ""; return;
              }
              const cvs = document.createElement('canvas');
