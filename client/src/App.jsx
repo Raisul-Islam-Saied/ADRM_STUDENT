@@ -1313,13 +1313,20 @@ const Input = ({ label, val, set, type="text", error }) => (
 
 // 3. FULL DETAIL VIEW WITH UPDATED PRINT BUTTONS & LOGIC
 const DetailView = ({ data, onBack, onEdit, onDelete }) => {
-  const formatDate = (dateStr) => {
-    if(!dateStr) return 'N/A';
-    try {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('bn-BD'); 
-    } catch(e) { return dateStr; }
-  };
+  // নতুন কোড (এটি দিয়ে রিপ্লেস করুন)
+const formatDate = (dateStr) => {
+  if(!dateStr) return 'N/A';
+  try {
+    const d = new Date(dateStr);
+    // ইংরেজি ফরম্যাট (English GB)
+    return d.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }); 
+  } catch(e) { return dateStr; }
+};
+
 const handlePrintIDCard = () => {
   const w = window.open('', '_blank');
   w.document.write(`
