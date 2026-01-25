@@ -337,7 +337,7 @@ useEffect(() => {
               <div><span class="label">Class:</span> ${s.ClassEn || s.ClassBn || ''}</div>
               <div><span class="label">Roll:</span> ${s.Roll || ''}</div>
               <div><span class="label">Blood:</span> ${s.BloodGroup || ''}</div>
-              <div><span class="label">Gender:</span> ${s.gender || ''}</div>
+              <div><span class="label"> ${s.Gender || ''}</span></div>
             </td>
             <td class="col-family block">
               <div><span class="label">পিতা:</span> ${s.FatherNameBn || ''}</div>
