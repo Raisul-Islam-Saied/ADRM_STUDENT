@@ -1515,12 +1515,13 @@ ${data.DistrictBn}</span></div>
 
   
     const msg = `
-🏫 *${CONFIG.APP_NAME}*
+🏫 *.${CONFIG.APP_NAME}.*
 ══════════════════════
 
 👤 *STUDENT PROFILE*
 ────────────────────
-• Name        : ${data.StudentNameEn} (${data.StudentNameBn})
+• Name        : ${data.StudentNameEn} 
+								${data.StudentNameBn}
 • ID          : ${data.ID}
 • Class       : ${data.ClassEn}
 • Roll        : ${data.Roll}
@@ -1533,9 +1534,9 @@ ${data.DistrictBn}</span></div>
 👪 *GUARDIAN DETAILS*
 ────────────────────
 • Father : ${data.FatherNameEn}
-  (${data.FatherNameBn})
+  				 ${data.FatherNameBn}
 • Mother : ${data.MotherNameEn}
-  (${data.MotherNameBn})
+  				 ${data.MotherNameBn}
 
 📞 *CONTACT INFO*
 ────────────────────
@@ -1544,12 +1545,8 @@ ${data.DistrictBn}</span></div>
 
 🏠 *ADDRESS*
 ────────────────────
-• ${data.HouseNameEn}, ${data.VillageEn}
-• ${data.UnionEn}, ${data.UpazilaEn}
-• ${data.DistrictEn}
-• ${data.HouseNameBn}, ${data.VillageBn}
-• ${data.UnionBn}, ${data.UpazilaBn}
-• ${data.DistrictBn}
+• ${data.HouseNameEn}, ${data.VillageEn}, ${data.UnionEn}, ${data.UpazilaEn}, ${data.DistrictEn}.
+• ${data.HouseNameBn}, ${data.VillageBn}, ${data.UnionBn}, ${data.UpazilaBn}, ${data.DistrictBn}
 
 ══════════════════════
 ✅ *REGISTRATION SUCCESSFUL*
