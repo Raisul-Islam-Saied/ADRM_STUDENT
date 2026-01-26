@@ -1666,9 +1666,9 @@ ${data.DistrictBn}</span></div>
   if(!phone) return alert("নম্বর নেই");
 
 const msg = `
-—————————————————————
+———————————————————————
   *ABDUR RAZZAK DAKHIL MADRASAH*
-—————————————————————
+———————————————————————
 
 👤 *STUDENT PROFILE*
 • Name  : ${data.StudentNameEn} 
@@ -1686,7 +1686,7 @@ const msg = `
 • Father : ${data.FatherNameEn}
 • পিতা :  ${data.FatherNameBn}
 • Mother : ${data.MotherNameEn}
-• Father : ${data.MotherNameBn}
+• মাতা : ${data.MotherNameBn}
 
 📞 *CONTACT INFO*
 • Mobile    : ${data.WhatsApp}
