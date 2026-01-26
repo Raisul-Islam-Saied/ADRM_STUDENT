@@ -161,12 +161,6 @@ const App = () => {
 const [scrollPos, setScrollPos] = useState(0);
 const [toast, setToast] = useState({ show: false, msg: '', type: 'success' });
 
-  const [filter, setFilter] = useState(() => {
-  const saved = localStorage.getItem("studentFilter");
-  return saved ? JSON.parse(saved) : { type: "", value: "" };
-});
-
-const [showFilter, setShowFilter] = useState(false);
 const showToast = (msg, type = 'success') => {
   setToast({ show: true, msg, type });
   // ৩ সেকেন্ড পর অটোমেটিক বন্ধ হবে
@@ -191,9 +185,7 @@ const showToast = (msg, type = 'success') => {
     });
     return () => unsubscribe();
   }, []);
-useEffect(() => {
-  localStorage.setItem("studentFilter", JSON.stringify(filter));
-}, [filter]);
+
   // 2. LOAD DATA ON LOGIN
   useEffect(() => { 
     if(currentUser) loadData(); 
@@ -212,27 +204,6 @@ useEffect(() => {
     if (currentUser.role === "Class") return students.filter(s => s.ClassBn === currentUser.classBn);
     return [];
   }, [students, currentUser]);
-
-  const filteredList = useMemo(() => {
-  if (!filter.type || !filter.value) return roleFilteredStudents;
-
-  return roleFilteredStudents.filter(s => {
-    if (filter.type === "Name")
-      return s.StudentNameEn?.toLowerCase().includes(filter.value.toLowerCase()) ||
-             s.StudentNameBn?.includes(filter.value);
-
-    if (filter.type === "Roll")
-      return s.Roll?.toString() === filter.value;
-
-    if (filter.type === "Gender")
-      return s.Gender === filter.value;
-
-    if (filter.type === "Class")
-      return s.ClassBn === filter.value;
-
-    return true;
-  });
-}, [roleFilteredStudents, filter]);
 useEffect(() => {
   const handleBack = (e) => {
     e.preventDefault();
@@ -804,7 +775,16 @@ ${data.DistrictBn}</span></div>
 };
 
 
-  
+  const filteredList = useMemo(() => {
+    if (!searchText) return roleFilteredStudents;
+    const lower = searchText.toLowerCase();
+    return roleFilteredStudents.filter(s => 
+      (s.StudentNameBn && s.StudentNameBn.toLowerCase().includes(lower)) || 
+      (s.ID && s.ID.toString().includes(lower)) ||
+      (s.Roll && s.Roll.toString().includes(lower)) ||
+      (s.WhatsApp && s.WhatsApp.includes(lower))
+    );
+  }, [roleFilteredStudents, searchText]);
   
   // --- AUTH CHECK LOADING ---
   if(authLoading) {
@@ -895,70 +875,7 @@ ${data.DistrictBn}</span></div>
 
             <div className="flex justify-between items-end mb-4 px-1">
               <h3 className="font-extrabold text-xl text-slate-800">Students</h3>
-              <button 
-  onClick={() => setShowFilter(s => !s)} 
-  className="text-blue-600 text-sm font-bold"
->
-  {filter.type 
-    ? `Filter > ${filter.type} - ${filter.value}` 
-    : "Filter"}
-</button>
-
-       {showFilter && (
-  <div className="bg-white p-4 rounded-2xl shadow border mb-4 space-y-3">
-    
-    <select
-      className="w-full p-3 bg-gray-50 rounded-xl font-bold"
-      value={filter.type}
-      onChange={e => setFilter({ type: e.target.value, value: "" })}
-    >
-      <option value="">Select Filter</option>
-      <option value="Name">Name</option>
-      <option value="Roll">Roll</option>
-      <option value="Gender">Gender</option>
-      <option value="Class">Class</option>
-    </select>
-
-    {filter.type === "Gender" && (
-      <select
-        className="w-full p-3 bg-gray-50 rounded-xl font-bold"
-        value={filter.value}
-        onChange={e => setFilter(f => ({ ...f, value: e.target.value }))}
-      >
-        <option value="">Select</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-    )}
-
-    {filter.type === "Class" && (
-      <select
-        className="w-full p-3 bg-gray-50 rounded-xl font-bold"
-        value={filter.value}
-        onChange={e => setFilter(f => ({ ...f, value: e.target.value }))}
-      >
-        {['প্লে','নার্সারি','কেজি','১ম','২য়','৩য়','৪র্থ','৫ম','৬ষ্ঠ','৭ম','৮ম','৯ম','১০ম']
-          .map(c => <option key={c} value={c}>{c}</option>)}
-      </select>
-    )}
-
-    {(filter.type === "Name" || filter.type === "Roll") && (
-      <input
-        className="w-full p-3 bg-gray-50 rounded-xl font-bold"
-        placeholder={`Enter ${filter.type}`}
-        value={filter.value}
-        onChange={e => setFilter(f => ({ ...f, value: e.target.value }))}
-      />
-    )}
-
-    <button 
-      onClick={() => setShowFilter(false)} 
-      className="w-full bg-slate-900 text-white py-2 rounded-xl font-bold"
-    >
-      Apply
-    </button>
-  </div>
-)}
+              <button onClick={() => setTab('search')} className="text-blue-600 text-sm font-bold">Search All</button>
             </div>
 
             {loading && students.length === 0 ? (
@@ -966,7 +883,7 @@ ${data.DistrictBn}</span></div>
                  {[1,2,3].map(i => <div key={i} className="h-20 bg-gray-200 rounded-2xl animate-pulse"/>)}
                </div>
             ) : (
-              filteredList.slice(0, 15).map((s, i) => (
+              roleFilteredStudents.slice(0, 15).map((s, i) => (
                 <StudentRow 
   key={i} 
   data={s} 
