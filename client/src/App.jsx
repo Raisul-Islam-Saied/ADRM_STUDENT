@@ -102,20 +102,43 @@ const NavTab = ({ icon: Icon, label, active, onClick, main }) => (
 );
 
 const StudentRow = ({ data, onClick }) => (
-  <div onClick={() => onClick(data)} className="bg-white p-4 rounded-2xl mb-3 flex items-center gap-4 shadow-[0_2px_15px_rgba(0,0,0,0.03)] border border-gray-50 active:scale-[0.98] transition-transform relative overflow-hidden cursor-pointer">
-    <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${data.Status === 'Active' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-    <img src={data.ImageURL || "https://via.placeholder.com/100"} className="w-14 h-14 rounded-full object-cover border-2 border-gray-100 bg-gray-50" alt=""/>
+  <div
+    onClick={() => onClick(data)}
+    className="bg-white p-4 rounded-2xl mb-3 flex items-center gap-4 shadow-[0_2px_15px_rgba(0,0,0,0.03)] border border-gray-50 active:scale-[0.98] transition-transform relative overflow-hidden cursor-pointer"
+  >
+    <div
+      className={`absolute left-0 top-0 bottom-0 w-1.5 ${
+        data.Status === 'Active' ? 'bg-emerald-500' : 'bg-red-500'
+      }`}
+    ></div>
+
+    <img
+      src={data.ImageURL || 'https://via.placeholder.com/100'}
+      className="w-14 h-14 rounded-full object-cover border-2 border-gray-100 bg-gray-50"
+      alt=""
+    />
+
     <div className="flex-1 min-w-0">
-      <div className="flex justify-between items-center">
-        <h3 className="font-bold text-slate-800 text-base truncate">{data.StudentNameBn}</h3>
-        <span className="bg-slate-100 text-slate-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Roll {data.Roll}</span>
+      <div className="flex justify-between items-center gap-2">
+        <h3 className="font-bold text-slate-800 text-base truncate min-w-0">
+          {data.StudentNameBn}
+        </h3>
+        <span className="bg-slate-100 text-slate-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase shrink-0">
+          Roll {data.Roll}
+        </span>
       </div>
+
       <div className="flex justify-between mt-1">
-        <p className="text-[10px] bg-gray-100 text-gray-500 px-1.5 rounded font-mono">ID: {data.ID}</p>
-        <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">Class {data.ClassBn}</span>
+        <p className="text-[10px] bg-gray-100 text-gray-500 px-1.5 rounded font-mono truncate">
+          ID: {data.ID}
+        </p>
+        <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded shrink-0">
+          Class {data.ClassBn}
+        </span>
       </div>
     </div>
-    <ChevronLeft size={18} className="text-gray-300 rotate-180 shrink-0"/>
+
+    <ChevronLeft size={18} className="text-gray-300 rotate-180 shrink-0" />
   </div>
 );
 
@@ -135,7 +158,7 @@ const App = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [searchText, setSearchText] = useState('');
 // ... অন্যান্য useState এর নিচে ...
-
+const [scrollPos, setScrollPos] = useState(0);
 const [toast, setToast] = useState({ show: false, msg: '', type: 'success' });
 
 const showToast = (msg, type = 'success') => {
@@ -167,7 +190,14 @@ const showToast = (msg, type = 'success') => {
   useEffect(() => { 
     if(currentUser) loadData(); 
   }, [currentUser]);
-
+useEffect(() => {
+  if (!detailData) {
+    window.scrollTo({
+      top: scrollPos,
+      behavior: "instant" // চাইলে "smooth"
+    });
+  }
+}, [detailData]);
   const roleFilteredStudents = useMemo(() => {
     if (!currentUser) return [];
     if (currentUser.role === "Admin") return students;
@@ -854,7 +884,14 @@ ${data.DistrictBn}</span></div>
                </div>
             ) : (
               roleFilteredStudents.slice(0, 15).map((s, i) => (
-                <StudentRow key={i} data={s} onClick={setDetailData} />
+                <StudentRow 
+  key={i} 
+  data={s} 
+  onClick={(data) => {
+    setScrollPos(window.scrollY); // 👈 exact position save
+    setDetailData(data);
+  }} 
+/>
               ))
             )}
           </div>
