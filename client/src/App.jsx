@@ -883,7 +883,7 @@ ${data.DistrictBn}</span></div>
                  {[1,2,3].map(i => <div key={i} className="h-20 bg-gray-200 rounded-2xl animate-pulse"/>)}
                </div>
             ) : (
-              roleFilteredStudents.slice(0, 15).map((s, i) => (
+              roleFilteredStudents.map((s, i) => (
                 <StudentRow 
   key={i} 
   data={s} 
