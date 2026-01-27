@@ -1,15 +1,33 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  Home, UserPlus, Search, Menu, X, Phone, MessageCircle, 
-  MapPin, Edit3, Trash2, ChevronLeft, Camera, Check, 
-  RefreshCw, Printer, ArrowRight, Layers, Users, Shield, 
-  CreditCard, Loader2, AlertCircle, FileText, Download,
-  IdCard, LogOut 
+import {
+  AlertCircle,
+  ArrowRight,
+  Camera, Check,
+  ChevronLeft,
+  CreditCard,
+  Edit3,
+  FileText,
+  Home,
+  IdCard,
+  Layers,
+  Loader2,
+  LogOut,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Printer,
+  RefreshCw,
+  Search,
+  Shield,
+  Trash2,
+  UserPlus,
+  Users,
+  X
 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
 // FIREBASE IMPORTS
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // ==============================================
 // 1. FIREBASE & APP CONFIGURATION
@@ -24,13 +42,17 @@ const firebaseConfig = {
   appId: "1:1003594162237:web:c7b377ab71e90c102d0a54",
   measurementId: "G-QETBDY6355"
 };
-
+const CLASS_ORDER = {
+  'প্লে': 1, 'নার্সারি': 2, 'কেজি': 3,
+  '১ম': 4, '২য়': 5, '৩য়': 6, '৪র্থ': 7, '৫ম': 8,
+  '৬ষ্ঠ': 9, '৭ম': 10, '৮ম': 11, '৯ম': 12, '১০ম': 13
+};
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const  app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const CONFIG = {
-  API_URL: "https://script.google.com/macros/s/AKfycbwrfvIeM6EiLVIK9J4BHQvGiCV5EDHLSfnnOcANqB5_z0ZSzwb8THKI5Ku7PEzuqkhjig/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbwJdYyKraaP194D-byPE8zZnCtIRyRgJRIN-AoH4CT5N7joPY_D63ZgfgwpdzJbEea0kA/exec",
   CLOUD_NAME: "djjnoclzp", 
   UPLOAD_PRESET: "student_db", 
   APP_NAME: "Abdur Razzaq Dakhil Madrasah "
@@ -153,7 +175,7 @@ const App = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [exportClass, setExportClass] = useState('All');
+
   const [detailData, setDetailData] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -161,11 +183,30 @@ const App = () => {
 const [scrollPos, setScrollPos] = useState(0);
 const [toast, setToast] = useState({ show: false, msg: '', type: 'success' });
 
+
+const [sortConfig, setSortConfig] = useState(() => {
+  return JSON.parse(localStorage.getItem("sortConfig")) || { field: '', order: '' };
+});
+
+const [adminClassFilter, setAdminClassFilter] = useState(() => {
+  return localStorage.getItem("adminClassFilter") || 'All';
+});
+
 const showToast = (msg, type = 'success') => {
   setToast({ show: true, msg, type });
   // ৩ সেকেন্ড পর অটোমেটিক বন্ধ হবে
   setTimeout(() => setToast(prev => ({ ...prev, show: false })), 3000);
 };
+
+
+useEffect(() => {
+  localStorage.setItem("sortConfig", JSON.stringify(sortConfig));
+}, [sortConfig]);
+
+useEffect(() => {
+  localStorage.setItem("adminClassFilter", adminClassFilter);
+}, [adminClassFilter]);
+
   // 1. FIREBASE AUTH LISTENER
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -249,6 +290,29 @@ useEffect(() => {
   };
 
   const handleSave = async (formData) => {
+    const exists = students.find(s =>
+  s.ClassBn === formData.classBn &&
+  String(s.Roll) === String(formData.roll) &&
+  s.ID !== (isEdit ? detailData.ID : null)
+);
+
+if (exists) {
+  showToast("এই ক্লাসে এই রোল নম্বর আগে থেকেই আছে!", "error");
+  return;
+}
+    // DUPLICATE ROLL CHECK
+if (!isEdit) {
+  const exists = students.find(s =>
+    s.ClassBn === formData.classBn &&
+    String(s.Roll) === String(formData.roll)
+  );
+
+  if (exists) {
+    showToast("এই ক্লাসে এই রোল নম্বর আগে থেকেই আছে!", "error");
+    return;
+  }
+}
+
     if (currentUser.role === "Class" && formData.classBn !== currentUser.classBn) {
       alert("আপনি শুধু নিজের ক্লাসে ডাটা দিতে পারবেন");
       return;
@@ -299,35 +363,39 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
   };
 
   const handleDelete = async (id) => {
-    if (currentUser.role === "Class" && detailData.ClassBn !== currentUser.classBn) {
-      alert("আপনি এই ক্লাসের ডাটা ডিলিট করতে পারবেন না");
-      return;
-    }
 
-    setProcessing(true);
-    setStudents(prev => prev.filter(s => s.ID !== id));
-    setDetailData(null);
+  if (!window.confirm("আপনি কি নিশ্চিত এই ডাটা ডিলিট করতে চান?")) return;
 
-    try {
-      await fetch(CONFIG.API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({ action: 'delete', id })
-      });
-      setTimeout(loadData, 2000);
-    } catch {
-      alert("নেটওয়ার্ক সমস্যা");
-      loadData();
-    }
-    setProcessing(false);
-  };
+  if (currentUser.role === "Class" && detailData.ClassBn !== currentUser.classBn) {
+    alert("আপনি এই ক্লাসের ডাটা ডিলিট করতে পারবেন না");
+    return;
+  }
+
+  setProcessing(true);
+  setStudents(prev => prev.filter(s => s.ID !== id));
+  setDetailData(null);
+
+  try {
+    await fetch(CONFIG.API_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    setTimeout(loadData, 2000);
+  } catch {
+    alert("নেটওয়ার্ক সমস্যা");
+    loadData();
+  }
+
+  setProcessing(false);
+};
+
 
   // --- EXPORT FUNCTIONS (FULL RESTORED) ---
-  const getFilteredData = () => {
-    const base = roleFilteredStudents;
-    if (exportClass === 'All') return base;
-    return base.filter(s => s.ClassBn === exportClass);
-  };
+const getFilteredData = () => {
+  return filteredList;
+};
+
 
   const handleExportTablePDF = () => {
     const data = getFilteredData();
@@ -348,6 +416,8 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
         table { width:100%; font-size: 15px; border-collapse: collapse; table-layout: fixed; }
         th, td { border:1px solid #000; padding:5px; vertical-align: top; }
         th { background:#eee; text-align:center; }
+        thead { display: table-header-group; }
+
         .col-small { width: 12%; text-align:center; }
         .col-name { width: 26%; }
         .col-family { width: 26%; }
@@ -355,51 +425,72 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
         img { width: 100%; height: 100%; object-fit: contain; object-position: center center; }
         .block div { margin:2px 0; }
         .label { font-weight:bold; }
+
       </style>
     </head>
-    <body>
-      <h2>${CONFIG.APP_NAME} - Student Register</h2>
-      <table>
+ <body>
+  <h2>${CONFIG.APP_NAME} - Student Register</h2>
+  <p style="text-align:center; font-size:13px; font-weight:bold; margin:4px 0;">
+  Total: ${data.length} | 
+  Male: ${data.filter(s => s.Gender === 'Male').length} | 
+  Female: ${data.filter(s => s.Gender === 'Female').length}
+</p>
+
+<p style="text-align:center; font-size:12px; font-weight:bold; margin-bottom:8px;">
+  ${[...new Set(data.map(s => s.ClassBn))].length === 1 
+    ? `Class: ${data[0].ClassBn}` 
+    : [...new Set(data.map(s => s.ClassBn))]
+        .map(c => `${c}: ${data.filter(s => s.ClassBn === c).length}`)
+        .join(' | ')
+  }
+</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="col-small">Photo</th>
+        <th class="col-name">Name Info</th>
+        <th class="col-small">Class Info</th>
+        <th class="col-family">Family & Phone</th>
+        <th class="col-address">Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${data.map(s => `
         <tr>
-          <th class="col-small">Photo</th>
-          <th class="col-name">Name Info</th>
-          <th class="col-small">Class Info</th>
-          <th class="col-family">Family & Phone</th>
-          <th class="col-address">Address</th>
+          <td class="col-small">
+            <img src="${s.ImageURL || ''}" />
+          </td>
+          <td class="col-name block">
+            <div><span class="label"> ${s.StudentNameBn || ''}</span></div>
+            <div><span class="label"> ${s.StudentNameEn || ''}</span></div>
+            <div><span class="label"> ${s.ID || ''}</span></div>
+          </td>
+          <td class="col-small block">
+            <div><span class="label">Class:</span> ${s.ClassEn || s.ClassBn || ''}</div>
+            <div><span class="label">Roll:</span> ${s.Roll || ''}</div>
+            <div><span class="label">Blood:</span> ${s.BloodGroup || ''}</div>
+            <div><span class="label"> ${s.Gender || ''}</span></div>
+          </td>
+          <td class="col-family block">
+            <div><span class="label">পিতা:</span> ${s.FatherNameBn || ''}</div>
+            <div><span class="label">মাতা:</span> ${s.MotherNameBn || ''}</div>
+            <div><span class="label">Phone:</span> ${s.WhatsApp || ''}</div>
+          </td>
+          <td class="col-address block">
+            <div>
+              ${s.HouseNameBn || ''}, ${s.VillageBn || ''}, 
+              ${s.UnionBn || ''}, ${s.UpazilaBn || ''}, 
+              ${s.DistrictBn || ''}
+            </div>
+          </td>
         </tr>
-        ${data.map(s => `
-          <tr>
-            <td class="col-small">
-              <img src="${s.ImageURL || ''}" />
-            </td>
-            <td class="col-name block">
-              <div><span class="label"> ${s.StudentNameBn || ''}</span></div>
-              <div><span class="label"> ${s.StudentNameEn || ''}</span></div>
-              <div><span class="label"> ${s.ID || ''}</span></div>
-            </td>
-            <td class="col-small block">
-              <div><span class="label">Class:</span> ${s.ClassEn || s.ClassBn || ''}</div>
-              <div><span class="label">Roll:</span> ${s.Roll || ''}</div>
-              <div><span class="label">Blood:</span> ${s.BloodGroup || ''}</div>
-              <div><span class="label"> ${s.Gender || ''}</span></div>
-            </td>
-            <td class="col-family block">
-              <div><span class="label">পিতা:</span> ${s.FatherNameBn || ''}</div>
-              <div><span class="label">মাতা:</span> ${s.MotherNameBn || ''}</div>
-              <div><span class="label">Phone:</span> ${s.WhatsApp || ''}</div>
-            </td>
-            <td class="col-address block">
-              <div>
-                ${s.HouseNameBn || ''}, ${s.VillageBn || ''}, 
-                ${s.UnionBn || ''}, ${s.UpazilaBn || ''}, 
-                ${s.DistrictBn || ''}
-              </div>
-            </td>
-          </tr>
-        `).join('')}
-      </table>
-      <script>window.print()</script>
-    </body>
+      `).join('')}
+    </tbody>
+  </table>
+  <script>window.print()</script>
+</body>
+
     </html>
     `);
     w.document.close();
@@ -430,7 +521,8 @@ showToast("সমস্যা হয়েছে: " + error.message, "error");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.href = encodedUri;
-    link.download = `Student_Data_${exportClass}_${new Date().toLocaleDateString()}.csv`;
+    link.download = `Student_Data_${new Date().toLocaleDateString()}.csv`;
+
     link.click();
   };
 
@@ -775,17 +867,61 @@ ${data.DistrictBn}</span></div>
 };
 
 
-  const filteredList = useMemo(() => {
-    if (!searchText) return roleFilteredStudents;
-    const lower = searchText.toLowerCase();
-    return roleFilteredStudents.filter(s => 
-      (s.StudentNameBn && s.StudentNameBn.toLowerCase().includes(lower)) || 
-      (s.ID && s.ID.toString().includes(lower)) ||
-      (s.Roll && s.Roll.toString().includes(lower)) ||
-      (s.WhatsApp && s.WhatsApp.includes(lower))
+ const filteredList = useMemo(() => {
+  let list = roleFilteredStudents;
+// SEARCH FILTER
+if (searchText) {
+  const lower = searchText.toLowerCase();
+  list = list.filter(s =>
+    (s.StudentNameBn && s.StudentNameBn.toLowerCase().includes(lower)) ||
+    (s.StudentNameEn && s.StudentNameEn.toLowerCase().includes(lower)) ||
+    (s.ID && s.ID.toString().includes(lower)) ||
+    (s.Roll && s.Roll.toString().includes(lower)) ||
+    (s.WhatsApp && s.WhatsApp.includes(lower))
+  );
+}
+
+  // শুধু Admin এর জন্য Class filter
+  if (currentUser?.role === "Admin" && adminClassFilter !== 'All') {
+
+    list = list.filter(s => s.ClassBn === adminClassFilter);
+  }
+
+  const { field, order } = sortConfig;
+
+  if (field === 'name') {
+    list = [...list].sort((a, b) =>
+      order === 'asc'
+        ? a.StudentNameEn.localeCompare(b.StudentNameEn)
+        : b.StudentNameEn.localeCompare(a.StudentNameEn)
     );
-  }, [roleFilteredStudents, searchText]);
-  
+  }
+
+  if (field === 'roll') {
+    list = [...list].sort((a, b) =>
+      order === 'asc' ? a.Roll - b.Roll : b.Roll - a.Roll
+    );
+  }
+
+  if (field === 'class') {
+    list = [...list].sort((a, b) =>
+      order === 'asc'
+        ? CLASS_ORDER[a.ClassBn] - CLASS_ORDER[b.ClassBn]
+        : CLASS_ORDER[b.ClassBn] - CLASS_ORDER[a.ClassBn]
+    );
+  }
+
+  if (field === 'time') {
+    list = [...list].sort((a, b) =>
+      order === 'asc'
+        ? new Date(a.Time) - new Date(b.Time)
+        : new Date(b.Time) - new Date(a.Time)
+    );
+  }
+
+  return list;
+}, [roleFilteredStudents, searchText, sortConfig, adminClassFilter, currentUser]);
+
   // --- AUTH CHECK LOADING ---
   if(authLoading) {
     return (
@@ -830,15 +966,16 @@ ${data.DistrictBn}</span></div>
             <div className="bg-slate-900 p-6 rounded-3xl text-white shadow-2xl shadow-slate-300 mb-8 relative overflow-hidden">
               <div className="relative z-10">
                 <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">
-                  {currentUser.role === 'Admin' ? 'Admin Dashboard' : `Class ${currentUser.classBn} Dashboard`}
+                {currentUser?.role === 'Admin' ? 'Admin Dashboard' : `Class ${currentUser?.classBn || ''} Dashboard`}
+
                 </p>
-                <h2 className="text-4xl font-black">{roleFilteredStudents.length} <span className="text-lg font-medium text-slate-400">Students</span></h2>
+                <h2 className="text-4xl font-black">{filteredList.length} <span className="text-lg font-medium text-slate-400">Students</span></h2>
                 <div className="mt-2 flex gap-3 text-xs">
   <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg font-bold">
-    Male: {roleFilteredStudents.filter(s => s.Gender === 'Male').length}
+    Male: {filteredList.filter(s => s.Gender === 'Male').length}
   </div>
   <div className="bg-pink-100 text-pink-800 px-3 py-1 rounded-lg font-bold">
-    Female: {roleFilteredStudents.filter(s => s.Gender === 'Female').length}
+    Female: {filteredList.filter(s => s.Gender === 'Female').length}
   </div>
 </div>
               </div>
@@ -848,42 +985,88 @@ ${data.DistrictBn}</span></div>
             {/* --- EXPORT SECTION --- */}
             <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Download Data</h3>
-              <div className="flex gap-2">
-                <select 
-                  className="bg-gray-50 border border-gray-200 text-sm rounded-lg p-2.5 outline-none font-bold text-slate-700 flex-1"
-                  value={exportClass}
-                  onChange={(e) => setExportClass(e.target.value)}
-                >
-                  <option value="All">All Classes</option>
-                  {['প্লে', 'নার্সারি', 'কেজি', '১ম', '২য়', '৩য়', '৪র্থ', '৫ম', '৬ষ্ঠ', '৭ম', '৮ম', '৯ম', '১০ম'].map(c => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-                <button onClick={handleExportExcel} className="bg-green-100 p-2.5 rounded-lg text-green-700"><FileText size={20}/></button>
-                <button onClick={handleExportPDF} className="bg-red-100 p-2.5 rounded-lg text-red-700"><Printer size={20}/></button>
-                <button onClick={handleExportTablePDF} className="bg-blue-100 p-2.5 rounded-lg text-blue-700"><Layers size={20}/></button>
-      
-<button 
-  onClick={handleExportAllIDCards} 
-  className="bg-indigo-100 p-2.5 rounded-lg text-indigo-700"
->
-  <IdCard size={20}/>
+             <div className="flex gap-7 justify-center">
+
+             
+            <button onClick={handleExportExcel} className="flex flex-col items-center gap-1">
+  <div className="bg-green-100 p-3 rounded-xl text-green-700">
+    <FileText size={22}/>
+  </div>
+  <span className="text-[10px] font-bold text-gray-500">Excel</span>
+</button>
+
+             <button onClick={handleExportPDF} className="flex flex-col items-center gap-1">
+  <div className="bg-red-100 p-3 rounded-xl text-red-700">
+    <Printer size={22}/>
+  </div>
+  <span className="text-[10px] font-bold text-gray-500">PDF</span>
+</button>
+
+               <button onClick={handleExportTablePDF} className="flex flex-col items-center gap-1">
+  <div className="bg-blue-100 p-3 rounded-xl text-blue-700">
+    <Layers size={22}/>
+  </div>
+  <span className="text-[10px] font-bold text-gray-500">Table</span>
+</button>
+
+  <button onClick={handleExportAllIDCards} className="flex flex-col items-center gap-1">
+  <div className="bg-indigo-100 p-3 rounded-xl text-indigo-700">
+    <IdCard size={22}/>
+  </div>
+  <span className="text-[10px] font-bold text-gray-500">ID</span>
 </button>
 
               </div>
             </div>
 
-            <div className="flex justify-between items-end mb-4 px-1">
-              <h3 className="font-extrabold text-xl text-slate-800">Students</h3>
-              <button onClick={() => setTab('search')} className="text-blue-600 text-sm font-bold">Search All</button>
-            </div>
+          <div className="flex justify-between items-center mb-4 px-1">
+          
+  <h3 className="font-extrabold text-xl text-slate-800">Students</h3>
+
+  <div className="flex gap-2 items-center">
+
+    {currentUser?.role === "Admin" && (
+      <select
+        value={adminClassFilter}
+        onChange={e => setAdminClassFilter(e.target.value)}
+        className="bg-gray-100 px-3 py-1.5 rounded-lg text-xs font-bold"
+      >
+        <option value="All">All Classes</option>
+        {Object.keys(CLASS_ORDER).map(c => (
+          <option key={c} value={c}>{c}</option>
+        ))}
+      </select>
+    )}
+
+ <select
+  value={`${sortConfig.field}_${sortConfig.order}`}
+  onChange={e => {
+    const [field, order] = e.target.value.split('_');
+    setSortConfig({ field, order });
+  }}
+  className="bg-gray-100 px-3 py-1.5 rounded-lg text-xs font-bold"
+>
+  <option value="_">Sort</option>
+  <option value="name_asc">Name ↑ (A-Z)</option>
+  <option value="name_desc">Name ↓ (Z-A)</option>
+  <option value="roll_asc">Roll ↑</option>
+  <option value="roll_desc">Roll ↓</option>
+  <option value="class_asc">Class ↑</option>
+  <option value="class_desc">Class ↓</option>
+  <option value="time_desc">New → Old</option>
+  <option value="time_asc">Old → New</option>
+</select>
+
+  </div>
+</div>
+
 
             {loading && students.length === 0 ? (
                <div className="space-y-3">
                  {[1,2,3].map(i => <div key={i} className="h-20 bg-gray-200 rounded-2xl animate-pulse"/>)}
                </div>
             ) : (
-              roleFilteredStudents.map((s, i) => (
+              filteredList.map((s, i) => (
                 <StudentRow 
   key={i} 
   data={s} 
@@ -897,6 +1080,7 @@ ${data.DistrictBn}</span></div>
           </div>
         </>
       )}
+
 
       {/* --- SEARCH VIEW --- */}
       {tab === 'search' && !detailData && (
