@@ -57,7 +57,7 @@ const CONFIG = {
   UPLOAD_PRESET: "student_db", 
   APP_NAME: "Abdur Razzaq Dakhil Madrasah "
 };
-
+const DEFAULT_IMAGE = "https://res.cloudinary.com/djjnoclzp/image/upload/v1769493159/gnqctft2jgmyltuezokk.jpg";
 // ROLE MAPPING (Email to Role)
 const USER_ROLES = {
   "admin@adrm.com":   { role: "Admin" },
@@ -319,7 +319,8 @@ if (!isEdit) {
     }
     setProcessing(true);
     try {
-      let imgUrl = formData.imageUrl;
+    //  let imgUrl = formData.imageUrl;
+      let imgUrl = formData.imageUrl || DEFAULT_IMAGE;
       if (imgUrl && imgUrl.startsWith('data:')) {
         const cloudData = new FormData();
         cloudData.append('file', imgUrl);
@@ -1431,13 +1432,13 @@ useEffect(() => {
       if(!form.wardNo) newErrors.wardNo = 'ওয়ার্ড আবশ্যক';
     }
 
-    if (step === 4) {
+   /* if (step === 4) {
       if(!form.imageUrl) {
         newErrors.imageUrl = 'ছবি আবশ্যক';
         showToast("দয়া করে ছবি আপলোড করুন", "error"); 
       }
     }
-
+*/
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
