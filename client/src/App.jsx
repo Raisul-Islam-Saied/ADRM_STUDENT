@@ -1511,7 +1511,7 @@ useEffect(() => {
     <option value="Female">Female</option>
   </select>
 </div>
-             <Input label="BIRTH REGISTRATION NUMBER" type="number" val={form.brn} set={v=>update('brn', v)} error={errors.brn} />
+             <Input label="BIRTH REGISTRATION NUMBER" min="17" max="17" type="number" val={form.brn} set={v=>update('brn', v)} error={errors.brn} />
              <Input label="DATE OF BIRTH" type="date" val={form.dob} set={v=>update('dob', v)} error={errors.dob} />
              
              <div className="relative pt-1 w-full">
