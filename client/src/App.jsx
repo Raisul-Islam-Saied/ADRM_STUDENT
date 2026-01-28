@@ -57,7 +57,7 @@ const CONFIG = {
   UPLOAD_PRESET: "student_db", 
   APP_NAME: "Abdur Razzaq Dakhil Madrasah "
 };
-const DEFAULT_IMAGE = "https://res.cloudinary.com/djjnoclzp/image/upload/v1769493159/gnqctft2jgmyltuezokk.jpg";
+const DEFAULT_IMAGE = "https://res.cloudinary.com/djjnoclzp/image/upload/v1769562330/yqbvj37lzjbokc2vw6wu.jpg";
 // ROLE MAPPING (Email to Role)
 const USER_ROLES = {
   "admin@adrm.com":   { role: "Admin" },
@@ -135,7 +135,7 @@ const StudentRow = ({ data, onClick }) => (
     ></div>
 
     <img
-      src={data.ImageURL || 'https://via.placeholder.com/100'}
+      src={data.ImageURL || DEFAULT_IMAGE }
       className="w-14 h-14 rounded-full object-cover border-2 border-gray-100 bg-gray-50"
       alt=""
     />
@@ -460,7 +460,7 @@ const getFilteredData = () => {
       ${data.map(s => `
         <tr>
           <td class="col-small">
-            <img src="${s.ImageURL || ''}" />
+            <img src="${s.ImageURL || DEFAULT_IMAGE }" />
           </td>
           <td class="col-name block">
             <div><span class="label"> ${s.StudentNameBn || ''}</span></div>
@@ -641,7 +641,7 @@ const handleExportPDF = () => {
 
         <div class="top-row">
           <div class="photo-box">
-            <img src="${s.ImageURL || ''}">
+            <img src="${s.ImageURL || DEFAULT_IMAGE}">
             <div>Roll: ${s.Roll}</div>
             <div>Class: ${s.ClassEn || s.ClassBn}</div>
           </div>
@@ -828,7 +828,7 @@ const handleExportAllIDCards = () => {
           <p>Rangunia, Chattogram</p>
         </div>
 
-        <img src="${data.ImageURL}" class="photo" />
+        <img src="${data.ImageURL || DEFAULT_IMAGE}" class="photo" />
 
         <div class="name-section">
           <div class="name-en">${data.StudentNameEn}</div>
@@ -1752,7 +1752,7 @@ body {
           <p>Rangunia, Chattogram</p>
         </div>
 
-        <img src="${data.ImageURL}" class="photo" />
+        <img src="${data.ImageURL || DEFAULT_IMAGE}" class="photo" />
 
         <div class="name-section">
           <div class="name-en">${data.StudentNameEn}</div>
@@ -1810,7 +1810,7 @@ ${data.DistrictBn}</span></div>
               <h1>${CONFIG.APP_NAME}</h1>
               <p>Official Student Profile Record</p>
             </div>
-            <img src="${data.ImageURL}" class="photo" />
+            <img src="${data.ImageURL || DEFAULT_IMAGE}" class="photo" />
 
             <div class="section">Basic Information</div>
             <div class="row"><span class="label">Student ID:</span><span class="value">${data.ID}</span></div>
@@ -1891,11 +1891,11 @@ Your student profile has been created.`.trim();
   return (
     <div className="fixed inset-0 bg-white z-[100] overflow-y-auto animate-in slide-in-from-bottom duration-300">
       <div className="relative h-80 bg-slate-900">
-        <img src={data.ImageURL} className="w-full h-full object-cover opacity-30 blur-sm" alt=""/>
+        <img src={data.ImageURL || DEFAULT_IMAGE} className="w-full h-full object-cover opacity-30 blur-sm" alt=""/>
         <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
         <button onClick={onBack} className="absolute top-4 left-4 p-3 bg-white/20 backdrop-blur rounded-full text-white"><ChevronLeft/></button>
         <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center">
-          <img src={data.ImageURL} className="w-40 h-40 rounded-full border-8 border-white shadow-2xl bg-white object-cover" alt=""/>
+          <img src={data.ImageURL || DEFAULT_IMAGE} className="w-40 h-40 rounded-full border-8 border-white shadow-2xl bg-white object-cover" alt=""/>
         </div>
       </div>
 
