@@ -889,7 +889,17 @@ if (searchText) {
   }
 
   const { field, order } = sortConfig;
+if (field === 'family') {
+  const groups = {};
 
+  list.forEach(s => {
+    const key = `${(s.FatherNameBn || '').trim()}_${(s.MotherNameBn || '').trim()}`;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  });
+
+  list = Object.values(groups).filter(g => g.length > 1).flat();
+     }
   if (field === 'name') {
     list = [...list].sort((a, b) =>
       order === 'asc'
@@ -1056,6 +1066,9 @@ if (searchText) {
   <option value="class_desc">Class ↓</option>
   <option value="time_desc">New → Old</option>
   <option value="time_asc">Old → New</option>
+   {currentUser?.role === "Admin" && (
+    <option value="family_asc">Sibling</option>
+  )}
 </select>
 
   </div>
