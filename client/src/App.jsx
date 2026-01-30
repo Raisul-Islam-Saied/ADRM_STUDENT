@@ -418,15 +418,15 @@ const getFilteredData = () => {
         @media print { @page { size: A4; margin: 8mm; } }
         body { font-family: 'Hind Siliguri', sans-serif; font-size: 15px; }
         h2 { text-align:center; margin-bottom:8px; }
-        table { width:100%; font-size: 13px; border-collapse: collapse; table-layout: fixed; }
+        table { width:100%; font-size: 14px; border-collapse: collapse; table-layout: fixed; }
         th, td { border:1px solid #000; padding:5px; vertical-align: top; }
         th { background:#eee; text-align:center; }
         thead { display: table-header-group; }
 
-        .col-small { width: 12%; text-align:center; }
+        .col-small { width: 10%; text-align:center; }
         .col-name { width: 26%; }
-        .col-family { width: 26%; }
-        .col-address { width: 24%; }
+        .col-family { width: 27%; }
+        .col-address { width: 25%; }
         img { width: 100%; height: 100%; object-fit: contain; object-position: center center; }
         .block div { margin:2px 0; }
         .label { font-weight:bold; }
