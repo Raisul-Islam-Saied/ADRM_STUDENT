@@ -409,10 +409,14 @@ const getFilteredData = () => {
     w.document.write(`
     <html>
     <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
       <title>${CONFIG.APP_NAME} - Register</title>
       <style>
         @media print { @page { size: A4; margin: 8mm; } }
-        body { font-family: sans-serif; font-size: 15px; }
+        body { font-family: 'Hind Siliguri', sans-serif; font-size: 15px; }
         h2 { text-align:center; margin-bottom:8px; }
         table { width:100%; font-size: 13px; border-collapse: collapse; table-layout: fixed; }
         th, td { border:1px solid #000; padding:5px; vertical-align: top; }
