@@ -7,7 +7,9 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {fontFamily: {
+        bangla: ['Hind Siliguri', 'system-ui', 'sans-serif'],
+      },},
   },
   plugins: [],
 }
