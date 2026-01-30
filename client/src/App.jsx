@@ -414,7 +414,7 @@ const getFilteredData = () => {
         @media print { @page { size: A4; margin: 8mm; } }
         body { font-family: sans-serif; font-size: 15px; }
         h2 { text-align:center; margin-bottom:8px; }
-        table { width:100%; font-size: 15px; border-collapse: collapse; table-layout: fixed; }
+        table { width:100%; font-size: 13px; border-collapse: collapse; table-layout: fixed; }
         th, td { border:1px solid #000; padding:5px; vertical-align: top; }
         th { background:#eee; text-align:center; }
         thead { display: table-header-group; }
@@ -471,7 +471,7 @@ const getFilteredData = () => {
             <div><span class="label">Class:</span> ${s.ClassEn || s.ClassBn || ''}</div>
             <div><span class="label">Roll:</span> ${s.Roll || ''}</div>
             <div><span class="label">Blood:</span> ${s.BloodGroup || ''}</div>
-            <div><span class="label"> ${s.Gender || ''}</span></div>
+            
           </td>
           <td class="col-family block">
             <div><span class="label">পিতা:</span> ${s.FatherNameBn || ''}</div>
