@@ -419,12 +419,13 @@ const getFilteredData = () => {
         body { font-family: 'Hind Siliguri', sans-serif; font-size: 15px; }
         h2 { text-align:center; margin-bottom:5px; }
         table { width:100%; font-size: 14px; border-collapse: collapse; table-layout: fixed; }
-        th, td { border:1px solid #000; padding:3px; vertical-align: top; }
+        th, td { border:1px solid #000; padding:3px 5px; vertical-align: top; }
         th { background:#eee; text-align:center; }
         thead { display: table-header-group; }
 
-        .col-small { width: 12%; }
-        .col-name { width: 26%; }
+      .col-img {width : 5%;}
+        .col-small { width: 6%; }
+        .col-name { width: 27%; }
         .col-family { width: 26%; }
         .col-address { width: 24%; }
         img { width: 100%; height: 100%; object-fit: contain; object-position: center center; }
@@ -441,7 +442,7 @@ const getFilteredData = () => {
   Female: ${data.filter(s => s.Gender === 'Female').length}
 </p>
 
-<p style="text-align:center; font-size:12px; font-weight:bold; margin-bottom:5px;">
+<p style="text-align:center; font-size:13px; font-weight:bold; margin-bottom:5px;">
   ${[...new Set(data.map(s => s.ClassBn))].length === 1 
     ? `Class: ${data[0].ClassBn}` 
     : [...new Set(data.map(s => s.ClassBn))]
