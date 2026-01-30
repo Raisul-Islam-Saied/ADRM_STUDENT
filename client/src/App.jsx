@@ -436,17 +436,17 @@ const getFilteredData = () => {
     </head>
  <body>
   <h2>${CONFIG.APP_NAME} - Student Register</h2>
-  <p style="text-align:center; font-size:13px; font-weight:bold; margin:4px 0;">
+  <p style="text-align:center; font-size:13px; font-weight:bold; margin:4px 0; margin-bottom :4px;">
   Total: ${data.length} | 
   Male: ${data.filter(s => s.Gender === 'Male').length} | 
   Female: ${data.filter(s => s.Gender === 'Female').length}
 </p>
 
 <p style="text-align:center; font-size:13px; font-weight:bold; margin-bottom:5px;">
-  ${[...new Set(data.map(s => s.ClassBn))].length === 1 
-    ? `Class: ${data[0].ClassBn}` 
-    : [...new Set(data.map(s => s.ClassBn))]
-        .map(c => `${c}: ${data.filter(s => s.ClassBn === c).length}`)
+  ${[...new Set(data.map(s => s.ClassEn))].length === 1 
+    ? `Class: ${data[0].ClassEn}` 
+    : [...new Set(data.map(s => s.ClassEn))]
+        .map(c => `${c}: ${data.filter(s => s.ClassEn === c).length}`)
         .join(' | ')
   }
 </p>
