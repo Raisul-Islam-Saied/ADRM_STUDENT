@@ -982,7 +982,7 @@ if (field === 'family') {
             <div className="bg-slate-900 p-6 rounded-3xl text-white shadow-2xl shadow-slate-300 mb-8 relative overflow-hidden">
               <div className="relative z-10">
                 <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">
-                {currentUser?.role === 'Admin' ? 'Admin Dashboard' : `Class ${currentUser?.classBn || ''} Dashboard`}
+                {currentUser?.role === 'Admin' ? 'Admin Dashboard' : `Class ${currentUser?.classEn || ''} Dashboard`}
 
                 </p>
                 <h2 className="text-4xl font-black">{filteredList.length} <span className="text-lg font-medium text-slate-400">Students</span></h2>
