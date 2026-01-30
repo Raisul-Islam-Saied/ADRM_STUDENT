@@ -464,7 +464,7 @@ const getFilteredData = () => {
     <tbody>
       ${data.map(s => `
         <tr>
-          <td class="col-small">
+          <td class="col-img">
             <img src="${s.ImageURL || DEFAULT_IMAGE }" />
           </td>
           <td class="col-name block">
