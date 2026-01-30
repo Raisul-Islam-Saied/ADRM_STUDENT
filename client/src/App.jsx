@@ -423,8 +423,8 @@ const getFilteredData = () => {
         th { background:#eee; text-align:center; }
         thead { display: table-header-group; }
 
-      .col-img {width : 5%;}
-        .col-small { width: 6%; }
+      .col-img {width : 11%;}
+        .col-small { width: 12%; }
         .col-name { width: 27%; }
         .col-family { width: 26%; }
         .col-address { width: 24%; }
