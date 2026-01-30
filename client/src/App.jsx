@@ -948,7 +948,7 @@ if (field === 'family') {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen font-sans text-slate-800 pb-24">
+    <div className="bg-gray-50 min-h-screen font-bangla text-slate-800 pb-24">
       {processing && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex flex-col items-center justify-center text-white">
           <Loader2 size={48} className="animate-spin text-blue-500 mb-4" />
